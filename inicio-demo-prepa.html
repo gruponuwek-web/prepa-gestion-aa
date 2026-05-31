@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PREPA · Demo del sistema de portales</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Manrope:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --blue-900:#0a335f; --blue-800:#0b3e72; --blue-700:#0e4d8b; --blue-600:#1565a8;
+    --blue-100:#dcebf8; --blue-50:#f1f7fc;
+    --ink:#14202c; --muted:#5d6e7d; --faint:#8a99a6; --line:#dde5ec;
+    --bg:#eef2f6; --card:#ffffff;
+    --radius:16px; --radius-sm:10px;
+    --shadow:0 1px 2px rgba(13,42,71,.05), 0 10px 30px rgba(13,42,71,.07);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0; font-family:'Manrope',sans-serif; color:var(--ink); background:var(--bg); -webkit-font-smoothing:antialiased; line-height:1.6}
+  .wrap{max-width:1120px; margin:0 auto; padding:0 26px}
+  .mono{font-family:'IBM Plex Mono',monospace}
+  h2.sec{font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:26px; color:var(--blue-900); margin:0 0 6px}
+  p.lead{font-size:15px; color:var(--muted); margin:0 0 26px; max-width:680px}
+
+  /* ===== Hero ===== */
+  .hero{background:linear-gradient(155deg,var(--blue-700),var(--blue-900)); color:#fff; padding:26px 0 70px; position:relative; overflow:hidden}
+  .hero::after{content:""; position:absolute; right:-120px; top:-120px; width:420px; height:420px; border-radius:50%; background:rgba(255,255,255,.05)}
+  .brand{display:flex; align-items:center; gap:12px; margin-bottom:64px}
+  .mark{width:42px; height:42px; border-radius:11px; background:#fff; display:flex; align-items:center; justify-content:center; font-family:'Bricolage Grotesque',sans-serif; font-weight:800; color:var(--blue-700); font-size:19px}
+  .brand b{font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:16px; display:block; line-height:1.15}
+  .brand span{font-size:12px; color:var(--blue-100)}
+  .eyebrow{display:inline-block; font-size:12px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--blue-100); background:rgba(255,255,255,.10); border:1px solid rgba(255,255,255,.18); padding:6px 13px; border-radius:30px; margin-bottom:20px}
+  .hero h1{font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:clamp(38px,6vw,64px); line-height:1.02; letter-spacing:-1px; margin:0 0 18px; max-width:880px}
+  .hero h1 em{font-style:normal; color:#9fd0f6}
+  .hero .sub{font-size:18px; color:#e6eff8; max-width:640px; margin:0 0 14px; font-weight:600}
+  .hero .desc{font-size:15px; color:#c9dcef; max-width:660px; margin:0 0 30px}
+  .cta{display:flex; gap:12px; flex-wrap:wrap}
+  .btn{display:inline-flex; align-items:center; gap:9px; font-family:'Manrope'; font-weight:700; font-size:15px; border-radius:var(--radius-sm); padding:13px 22px; cursor:pointer; text-decoration:none; border:1px solid transparent; transition:transform .12s, background .15s}
+  .btn:hover{transform:translateY(-1px)}
+  .btn-white{background:#fff; color:var(--blue-800)}
+  .btn-ghost{background:rgba(255,255,255,.08); color:#fff; border-color:rgba(255,255,255,.25)}
+  .btn-ghost:hover{background:rgba(255,255,255,.16)}
+
+  /* reveal on load */
+  .rv{opacity:0; transform:translateY(14px); animation:rise .7s cubic-bezier(.2,.7,.3,1) forwards}
+  .d1{animation-delay:.05s}.d2{animation-delay:.15s}.d3{animation-delay:.25s}.d4{animation-delay:.35s}.d5{animation-delay:.45s}
+  @keyframes rise{to{opacity:1; transform:none}}
+
+  /* ===== Secciones ===== */
+  section.band{padding:54px 0}
+  .lift{margin-top:-44px}
+
+  /* Diseño -> Ejecución */
+  .phases{display:grid; grid-template-columns:1fr auto 1fr; gap:18px; align-items:stretch}
+  .phase{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); padding:24px 26px}
+  .phase .tag{font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--blue-600)}
+  .phase h3{font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:22px; color:var(--blue-900); margin:6px 0 8px}
+  .phase p{font-size:14px; color:var(--muted); margin:0}
+  .arrowcol{display:flex; align-items:center; justify-content:center; color:var(--blue-600); font-size:30px; font-weight:700}
+
+  /* De qué se trata */
+  .facts{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:6px}
+  .fact{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:18px 20px; box-shadow:var(--shadow)}
+  .fact .k{font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.5px; color:var(--faint)}
+  .fact .v{font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:18px; color:var(--blue-900); margin-top:3px}
+  .fact .v small{display:block; font-family:'Manrope'; font-weight:500; font-size:13px; color:var(--muted); margin-top:3px}
+
+  /* Infografía de flujo */
+  .flow{display:grid; grid-template-columns:repeat(4,1fr); gap:12px}
+  .step{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); padding:18px 18px 16px; position:relative}
+  .step .n{width:30px; height:30px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:14px; margin-bottom:11px}
+  .step h4{font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:15.5px; color:var(--blue-900); margin:0 0 5px}
+  .step p{font-size:13px; color:var(--muted); margin:0 0 12px}
+  .rolebadge{font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:.4px; padding:3px 9px; border-radius:20px}
+  .r-des{background:#f1efe8; color:#5f5e5a} .r-bo{background:#eeedfe; color:#534ab7}
+  .r-con{background:#e6f1fb; color:#185fa5} .r-log{background:#e1f5ee; color:#0f6e56} .r-amb{background:#eaf3de; color:#3b6d11}
+  .n-des{background:#f1efe8; color:#5f5e5a} .n-bo{background:#eeedfe; color:#534ab7}
+  .n-con{background:#e6f1fb; color:#185fa5} .n-log{background:#e1f5ee; color:#0f6e56} .n-amb{background:#eaf3de; color:#3b6d11}
+  .flowlegend{display:flex; gap:16px; flex-wrap:wrap; font-size:12px; color:var(--muted); margin-top:14px}
+  .flowlegend span{display:inline-flex; align-items:center; gap:6px}
+  .ldot{width:10px; height:10px; border-radius:3px; display:inline-block}
+
+  /* Beneficios */
+  .benefits{display:grid; grid-template-columns:repeat(3,1fr); gap:12px}
+  .benefit{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); padding:20px 22px}
+  .benefit .ico{width:38px; height:38px; border-radius:10px; background:var(--blue-50); color:var(--blue-700); display:flex; align-items:center; justify-content:center; margin-bottom:12px}
+  .benefit .ico svg{width:21px; height:21px}
+  .benefit h4{font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:16px; color:var(--blue-900); margin:0 0 5px}
+  .benefit p{font-size:13.5px; color:var(--muted); margin:0}
+
+  /* Accesos */
+  .access{display:grid; grid-template-columns:repeat(2,1fr); gap:14px}
+  .acard{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); padding:26px 28px; display:flex; flex-direction:column}
+  .acard .pretitle{font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--blue-600); margin-bottom:6px}
+  .acard h3{font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:23px; color:var(--blue-900); margin:0 0 8px}
+  .acard p{font-size:14px; color:var(--muted); margin:0 0 12px}
+  .acard ul{margin:0 0 20px; padding-left:18px; color:var(--muted); font-size:13.5px}
+  .acard ul li{margin-bottom:3px}
+  .acard .go{margin-top:auto}
+  .enter{display:inline-flex; align-items:center; gap:9px; background:var(--blue-700); color:#fff; font-weight:700; font-size:15px; text-decoration:none; border-radius:var(--radius-sm); padding:13px 24px}
+  .enter:hover{background:var(--blue-600)}
+
+  /* Huecos */
+  .gaps{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); padding:8px 4px}
+  .gap{display:flex; gap:14px; align-items:flex-start; padding:16px 22px; border-bottom:1px dashed var(--line)}
+  .gap:last-child{border-bottom:0}
+  .gap .g-ico{width:30px; height:30px; border-radius:8px; flex:none; background:var(--blue-50); color:var(--blue-700); display:flex; align-items:center; justify-content:center; font-family:'IBM Plex Mono',monospace; font-weight:600}
+  .gap b{font-family:'Bricolage Grotesque',sans-serif; color:var(--blue-900); font-weight:700; font-size:15px}
+  .gap p{margin:2px 0 0; font-size:13.5px; color:var(--muted)}
+
+  footer{background:var(--blue-900); color:#bcd2e8; padding:30px 0; font-size:13px}
+  footer .wrap{display:flex; justify-content:space-between; gap:14px; flex-wrap:wrap; align-items:center}
+  footer b{color:#fff; font-family:'Bricolage Grotesque',sans-serif}
+
+  @media(max-width:900px){
+    .phases{grid-template-columns:1fr} .arrowcol{transform:rotate(90deg); padding:4px 0}
+    .facts{grid-template-columns:1fr} .flow{grid-template-columns:repeat(2,1fr)}
+    .benefits{grid-template-columns:1fr} .access{grid-template-columns:1fr}
+  }
+  @media(max-width:540px){.flow{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+  <header class="hero">
+    <div class="wrap">
+      <div class="brand rv d1"><div class="mark">P</div><div><b>Prefabricados de Pachuca</b><span>Sistema de portales de suministro</span></div></div>
+      <div class="eyebrow rv d2">Demo operativa · previo a Odoo</div>
+      <h1 class="rv d2">Del diseño <em>a la ejecución</em></h1>
+      <p class="sub rv d3">El proceso de suministro de vigueta y bovedilla, mapeado de punta a punta y convertido en portales que ya funcionan.</p>
+      <p class="desc rv d4">No es solo una maqueta para entender el flujo antes de migrar a Odoo: es operativo. Puede usarse hoy para crear la disciplina del proceso y, sobre todo, para ver con claridad dónde están los huecos antes de escalar.</p>
+      <div class="cta rv d5">
+        <a class="btn btn-white" href="#accesos">Entrar a los portales</a>
+        <a class="btn btn-ghost" href="#flujo">Ver el flujo</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Diseño -> Ejecución -->
+  <section class="band lift">
+    <div class="wrap">
+      <div class="phases">
+        <div class="phase">
+          <div class="tag">Diseño</div>
+          <h3>Entender el flujo</h3>
+          <p>Mapeamos actores, reglas y estados del proceso real: quién pide, quién confirma, quién entrega y cómo se concilia. La radiografía que Odoo necesita antes de configurarse.</p>
+        </div>
+        <div class="arrowcol">→</div>
+        <div class="phase">
+          <div class="tag">Ejecución</div>
+          <h3>Ya funciona</h3>
+          <p>Ese diseño está vivo en dos portales operativos. Se puede trabajar con ellos hoy: el contratista pide, PREPA confirma y entrega, y todo queda registrado.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- De qué se trata -->
+  <section class="band">
+    <div class="wrap">
+      <h2 class="sec">De qué se trata</h2>
+      <p class="lead">Un desarrollo de CESVIN, repartido entre sus contratistas, surtido por PREPA. El sistema ordena ese suministro de principio a fin.</p>
+      <div class="facts">
+        <div class="fact"><div class="k">Actores</div><div class="v">Desarrollador, PREPA y contratistas<small>CESVIN define; PREPA surte; los contratistas reciben.</small></div></div>
+        <div class="fact"><div class="k">Alcance</div><div class="v">Vigueta y bovedilla<small>Un desarrollo, seis contratistas. Block queda para una fase dos.</small></div></div>
+        <div class="fact"><div class="k">Propósito</div><div class="v">Orden y trazabilidad<small>Del plan autorizado a la entrega conciliada, sin perder el hilo.</small></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Infografía de flujo -->
+  <section class="band" id="flujo">
+    <div class="wrap">
+      <h2 class="sec">Cómo fluye la información</h2>
+      <p class="lead">Cada paso tiene un responsable claro. El plan del desarrollador es el techo; todo lo demás se mide contra él.</p>
+      <div class="flow">
+        <div class="step"><div class="n n-des">1</div><h4>Plan del desarrollador</h4><p>CESVIN define contratos, contratistas y casas por modelo.</p><span class="rolebadge r-des">Desarrollador</span></div>
+        <div class="step"><div class="n n-bo">2</div><h4>Alta en backoffice</h4><p>PREPA captura el plan, gerencia comercial valida y se generan portales, saldos y usuarios.</p><span class="rolebadge r-bo">Backoffice</span></div>
+        <div class="step"><div class="n n-con">3</div><h4>Pedido del contratista</h4><p>Pide contra su saldo autorizado, por modelo de casa, en su portal.</p><span class="rolebadge r-con">Contratista</span></div>
+        <div class="step"><div class="n n-bo">4</div><h4>Confirmación</h4><p>Backoffice asigna folio de OC y fecha promesa, y notifica. Queda asentado en el portal.</p><span class="rolebadge r-bo">Backoffice</span></div>
+        <div class="step"><div class="n n-log">5</div><h4>Entrega</h4><p>Logística despacha y registra con fecha real: completa, o parcial que se completa con complemento. Los daños se reponen sobre la misma OC.</p><span class="rolebadge r-log">Logística</span></div>
+        <div class="step"><div class="n n-amb">6</div><h4>Conciliación</h4><p>Doble confirmación: el contratista valida que coincide y PREPA da el ok.</p><span class="rolebadge r-amb">Contratista + PREPA</span></div>
+        <div class="step"><div class="n n-bo">7</div><h4>Control en el maestro</h4><p>PREPA ve a todos los contratistas contra el plan: avance, saldos y montos.</p><span class="rolebadge r-bo">Backoffice</span></div>
+      </div>
+      <div class="flowlegend">
+        <span><i class="ldot" style="background:#888780"></i>Desarrollador</span>
+        <span><i class="ldot" style="background:#534ab7"></i>Backoffice</span>
+        <span><i class="ldot" style="background:#185fa5"></i>Contratista</span>
+        <span><i class="ldot" style="background:#0f6e56"></i>Logística</span>
+        <span><i class="ldot" style="background:#639922"></i>Ambos</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Beneficios -->
+  <section class="band">
+    <div class="wrap">
+      <h2 class="sec">Lo que esto resuelve</h2>
+      <p class="lead">El valor no está en la pantalla bonita, sino en el orden que impone y en lo que deja ver.</p>
+      <div class="benefits">
+        <div class="benefit"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9 12l2 2 4-4"/></svg></div><h4>Control de saldos</h4><p>El plan autorizado es un candado: nadie pide más de lo que el desarrollador asignó.</p></div>
+        <div class="benefit"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h10"/></svg></div><h4>Trazabilidad punta a punta</h4><p>Cada orden, entrega y nota queda registrada. Nada vive solo en un WhatsApp suelto.</p></div>
+        <div class="benefit"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg></div><h4>Cierre con acuerdo</h4><p>La conciliación por doble confirmación evita disputas: ambas partes dan el visto bueno.</p></div>
+        <div class="benefit"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7z"/></svg></div><h4>Disciplina antes de Odoo</h4><p>La migración hereda un proceso ya probado, no improvisado sobre la marcha.</p></div>
+        <div class="benefit"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/></svg></div><h4>Visibilidad para PREPA</h4><p>Una sola vista de todos los contratistas contra el plan, con avance y montos.</p></div>
+        <div class="benefit"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg></div><h4>Los huecos a la vista</h4><p>Operar el flujo revela qué falta definir antes de escalar a más contratistas y materiales.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Accesos -->
+  <section class="band" id="accesos">
+    <div class="wrap">
+      <h2 class="sec">Entra a los portales</h2>
+      <p class="lead">Dos caras del mismo sistema. Recórrelas para ver el flujo en acción.</p>
+      <div class="access">
+        <div class="acard">
+          <div class="pretitle">Lo que ve el contratista</div>
+          <h3>Portal del contratista</h3>
+          <p>La vista de ICMEC: pide material, da seguimiento y revisa sus finanzas.</p>
+          <ul>
+            <li>Tablero con avance por contrato y modelo</li>
+            <li>Nuevo requerimiento contra su saldo</li>
+            <li>Seguimiento de entregas y conciliación</li>
+          </ul>
+          <div class="go"><a class="enter" href="portal-contratista-icmec.html">Entrar al portal del contratista →</a></div>
+        </div>
+        <div class="acard">
+          <div class="pretitle">Lo que opera PREPA</div>
+          <h3>Portal maestro · backoffice</h3>
+          <p>El lado de PREPA: control del desarrollo, operación y configuración.</p>
+          <ul>
+            <li>Maestro: todos los contratistas contra el plan</li>
+            <li>Requisiciones: backoffice, logística y conciliación</li>
+            <li>Alta: catálogos, plan y generación de portales</li>
+          </ul>
+          <div class="go"><a class="enter" href="portal-backoffice-prepa.html">Entrar al portal maestro →</a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Huecos / lo que sigue -->
+  <section class="band">
+    <div class="wrap">
+      <h2 class="sec">Lo que sigue y los huecos por cerrar</h2>
+      <p class="lead">Esta disciplina hace visibles las decisiones pendientes. Estas son las próximas.</p>
+      <div class="gaps">
+        <div class="gap"><div class="g-ico">B</div><div><b>Proceso de block</b><p>Fase dos, con su propia lógica y formato distintos a vigueta y bovedilla.</p></div></div>
+        <div class="gap"><div class="g-ico">F</div><div><b>Facturación y CFDI</b><p>Definir si PREPA factura por orden, por entrega o agrupada, y cómo se consulta el comprobante.</p></div></div>
+        <div class="gap"><div class="g-ico">C</div><div><b>Más contratistas y desarrollos</b><p>Escalar el mismo flujo a todo el padrón y a otros desarrollos del cliente.</p></div></div>
+        <div class="gap"><div class="g-ico">O</div><div><b>Migración a Odoo</b><p>Llevar este proceso ya ordenado al ERP, heredando reglas, estados y disciplina.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <span><b>Prefabricados de Pachuca</b> · Demo del sistema de portales de suministro</span>
+      <span>Prototipo operativo · previo a Odoo · 2026</span>
+    </div>
+  </footer>
+
+</body>
+</html>
