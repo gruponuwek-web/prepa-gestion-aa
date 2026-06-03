@@ -91,8 +91,8 @@
   .benefit p{font-size:13.5px; color:var(--muted); margin:0}
 
   /* Accesos */
-  .access{display:grid; grid-template-columns:repeat(2,1fr); gap:14px}
-  .acard{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); padding:26px 28px; display:flex; flex-direction:column}
+  .access{display:grid; grid-template-columns:repeat(3,1fr); gap:12px}
+  .acard{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); padding:24px 24px; display:flex; flex-direction:column}
   .acard .pretitle{font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--blue-600); margin-bottom:6px}
   .acard h3{font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:23px; color:var(--blue-900); margin:0 0 8px}
   .acard p{font-size:14px; color:var(--muted); margin:0 0 12px}
@@ -151,7 +151,7 @@
         <div class="phase">
           <div class="tag">Ejecución</div>
           <h3>Ya funciona</h3>
-          <p>Ese diseño está vivo en dos portales operativos. Se puede trabajar con ellos hoy: el contratista pide, PREPA confirma y entrega, y todo queda registrado.</p>
+          <p>Ese diseño está vivo en tres portales operativos. Se puede trabajar con ellos hoy: el contratista pide por losas, backoffice confirma y despacha, logística entrega, y todo queda registrado.</p>
         </div>
       </div>
     </div>
@@ -161,10 +161,10 @@
   <section class="band">
     <div class="wrap">
       <h2 class="sec">De qué se trata</h2>
-      <p class="lead">Un desarrollo de CESVIN, repartido entre sus contratistas, surtido por PREPA. El sistema ordena ese suministro de principio a fin.</p>
+      <p class="lead">Los desarrollos de CESVIN, repartidos entre sus contratistas, surtidos por PREPA. El sistema ordena ese suministro de principio a fin.</p>
       <div class="facts">
         <div class="fact"><div class="k">Actores</div><div class="v">Desarrollador, PREPA y contratistas<small>CESVIN define; PREPA surte; los contratistas reciben.</small></div></div>
-        <div class="fact"><div class="k">Alcance</div><div class="v">Vigueta y bovedilla<small>Un desarrollo, seis contratistas. Block queda para una fase dos.</small></div></div>
+        <div class="fact"><div class="k">Alcance</div><div class="v">Vigueta y bovedilla<small>Proyectos, fraccionamientos y lotes; se surte por losas. El block queda para una fase dos.</small></div></div>
         <div class="fact"><div class="k">Propósito</div><div class="v">Orden y trazabilidad<small>Del plan autorizado a la entrega conciliada, sin perder el hilo.</small></div></div>
       </div>
     </div>
@@ -178,9 +178,9 @@
       <div class="flow">
         <div class="step"><div class="n n-des">1</div><h4>Plan del desarrollador</h4><p>CESVIN define contratos, contratistas y casas por modelo.</p><span class="rolebadge r-des">Desarrollador</span></div>
         <div class="step"><div class="n n-bo">2</div><h4>Alta en backoffice</h4><p>PREPA captura el plan, gerencia comercial valida y se generan portales, saldos y usuarios.</p><span class="rolebadge r-bo">Backoffice</span></div>
-        <div class="step"><div class="n n-con">3</div><h4>Pedido del contratista</h4><p>Pide contra su saldo autorizado, por modelo de casa, en su portal.</p><span class="rolebadge r-con">Contratista</span></div>
-        <div class="step"><div class="n n-bo">4</div><h4>Confirmación</h4><p>Backoffice asigna folio de OC y fecha promesa, y notifica. Queda asentado en el portal.</p><span class="rolebadge r-bo">Backoffice</span></div>
-        <div class="step"><div class="n n-log">5</div><h4>Entrega</h4><p>Logística despacha y registra con fecha real: completa, o parcial que se completa con complemento. Los daños se reponen sobre la misma OC.</p><span class="rolebadge r-log">Logística</span></div>
+        <div class="step"><div class="n n-con">3</div><h4>Pedido del contratista</h4><p>Pide contra su saldo autorizado, por losas de entrepiso y azotea, en su portal.</p><span class="rolebadge r-con">Contratista</span></div>
+        <div class="step"><div class="n n-bo">4</div><h4>Confirmación y salida</h4><p>Backoffice asigna folio de OC y fecha promesa, y cuando va en camino marca la salida a obra.</p><span class="rolebadge r-bo">Backoffice</span></div>
+        <div class="step"><div class="n n-log">5</div><h4>Entrega</h4><p>Logística registra la entrega con su número de remisión: completa, o parcial que se cierra después con otra remisión.</p><span class="rolebadge r-log">Logística</span></div>
         <div class="step"><div class="n n-amb">6</div><h4>Conciliación</h4><p>Doble confirmación: el contratista valida que coincide y PREPA da el ok.</p><span class="rolebadge r-amb">Contratista + PREPA</span></div>
         <div class="step"><div class="n n-bo">7</div><h4>Control en el maestro</h4><p>PREPA ve a todos los contratistas contra el plan: avance, saldos y montos.</p><span class="rolebadge r-bo">Backoffice</span></div>
       </div>
@@ -214,29 +214,40 @@
   <section class="band" id="accesos">
     <div class="wrap">
       <h2 class="sec">Entra a los portales</h2>
-      <p class="lead">Dos caras del mismo sistema. Recórrelas para ver el flujo en acción.</p>
+      <p class="lead">Tres vistas del mismo sistema, una por rol. Recórrelas para ver el flujo en acción.</p>
       <div class="access">
         <div class="acard">
           <div class="pretitle">Lo que ve el contratista</div>
           <h3>Portal del contratista</h3>
           <p>La vista de ICMEC: pide material, da seguimiento y revisa sus finanzas.</p>
           <ul>
-            <li>Tablero con avance por contrato y modelo</li>
+            <li>Tablero con avance por contrato y modelo, en losas</li>
             <li>Nuevo requerimiento contra su saldo</li>
             <li>Seguimiento de entregas y conciliación</li>
           </ul>
-          <div class="go"><a class="enter" href="portal-contratista-icmec.html">Entrar al portal del contratista →</a></div>
+          <div class="go"><a class="enter" href="portal-contratista-icmec.html">Entrar →</a></div>
         </div>
         <div class="acard">
-          <div class="pretitle">Lo que opera PREPA</div>
-          <h3>Portal maestro · backoffice</h3>
-          <p>El lado de PREPA: control del desarrollo, operación y configuración.</p>
+          <div class="pretitle">El hub de PREPA</div>
+          <h3>Portal de backoffice</h3>
+          <p>El control del desarrollo: todos los contratistas, confirmación y conciliación.</p>
           <ul>
             <li>Maestro: todos los contratistas contra el plan</li>
-            <li>Requisiciones: backoffice, logística y conciliación</li>
-            <li>Alta: catálogos, plan y generación de portales</li>
+            <li>Confirma la OC y marca la salida a obra</li>
+            <li>Conciliación de doble check y catálogo de modelos</li>
           </ul>
-          <div class="go"><a class="enter" href="portal-backoffice-prepa.html">Entrar al portal maestro →</a></div>
+          <div class="go"><a class="enter" href="portal-backoffice-prepa.html">Entrar →</a></div>
+        </div>
+        <div class="acard">
+          <div class="pretitle">La operación de PREPA</div>
+          <h3>Portal de logística</h3>
+          <p>La entrega en piso: registra remisiones y completa lo que llegó parcial.</p>
+          <ul>
+            <li>Lista de requisiciones con filtros por proyecto y fecha</li>
+            <li>Edita solo las que ya salieron o están parciales</li>
+            <li>Captura remisión, completa o parcial con complemento</li>
+          </ul>
+          <div class="go"><a class="enter" href="portal-logistica-prepa.html">Entrar →</a></div>
         </div>
       </div>
     </div>
