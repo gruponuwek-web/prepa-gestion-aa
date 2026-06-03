@@ -3,18 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PREPA · Portal maestro (backoffice)</title>
+<title>PREPA · Backoffice</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Manrope:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  /* ============ Tokens ============ */
   :root{
     --blue-900:#0a335f; --blue-800:#0b3e72; --blue-700:#0e4d8b; --blue-600:#1565a8;
-    --blue-100:#dcebf8; --blue-50:#f1f7fc; --action:#e7f0fb;
+    --blue-100:#dcebf8; --blue-50:#f1f7fc;
     --ink:#14202c; --muted:#5d6e7d; --faint:#8a99a6; --line:#dde5ec;
-    --bg:#e9eef3; --card:#ffffff; --surface:#f6f9fc;
-    --amber:#d18a23; --teal:#12907e; --green:#2f8a3e; --disp:#cdd9e4;
+    --bg:#e9eef3; --card:#ffffff; --action:#eef5fc;
+    --amber:#d18a23; --teal:#12907e; --green:#2f8a3e; --disp:#cdd9e4; --coral:#c0623a;
+    --ok:#137a4d; --ok-bg:#e4f2ea; --warn:#a85a12; --warn-bg:#fbeede; --coral-bg:#f7e7e0;
     --radius:14px; --radius-sm:9px;
     --shadow:0 1px 2px rgba(13,42,71,.05), 0 8px 24px rgba(13,42,71,.06);
   }
@@ -22,9 +22,7 @@
   html,body{margin:0}
   body{font-family:'Manrope',sans-serif; color:var(--ink); background:var(--bg); -webkit-font-smoothing:antialiased; line-height:1.5}
   .num{font-family:'IBM Plex Mono',monospace}
-  .card{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow)}
 
-  /* ============ Barra superior ============ */
   .topnav{display:flex; align-items:center; gap:18px; background:linear-gradient(180deg,var(--blue-700),var(--blue-900)); color:#fff; padding:12px 24px; flex-wrap:wrap}
   .topnav .brand{display:flex; align-items:center; gap:11px}
   .topnav .mark{width:40px; height:40px; border-radius:10px; background:#fff; flex:none; display:flex; align-items:center; justify-content:center; font-family:'Bricolage Grotesque',sans-serif; font-weight:800; color:var(--blue-700); font-size:18px}
@@ -39,157 +37,148 @@
   .who b{display:block; font-family:'Bricolage Grotesque',sans-serif; font-size:15px}
   .who span{font-size:11px; color:var(--blue-100); text-transform:uppercase; letter-spacing:.5px}
 
-  /* ============ Main / secciones ============ */
-  .main{max-width:1180px; margin:0 auto; padding:24px 26px 60px; min-width:0}
-  .mainhead{display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin-bottom:6px}
+  .main{max-width:1180px; margin:0 auto; padding:24px 26px 60px}
+  .mainhead{display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin-bottom:18px}
   .mainhead h2{font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:24px; color:var(--blue-900); margin:0}
   .mainhead .crumb{font-size:13px; color:var(--muted)}
-  .ctx{font-size:13px; color:var(--muted); margin:0 2px 16px}
-  .ctx b{color:var(--blue-800); font-weight:600}
   .section{display:none}
   .section.active{display:block; animation:rise .35s ease}
   .sectitle{font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:15px; color:var(--blue-900); margin:22px 2px 10px}
 
-  /* ============ KPIs ============ */
+  .ffilter{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:18px}
+  .fbtn{font-family:'Manrope'; font-size:13.5px; font-weight:600; cursor:pointer; border:1px solid var(--line); background:#fff; color:var(--muted); border-radius:22px; padding:8px 16px}
+  .fbtn:hover{background:var(--blue-50)}
+  .fbtn.active{background:var(--blue-700); color:#fff; border-color:var(--blue-700)}
+
   .kpis{display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:12px}
   .kpi{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:14px 16px; box-shadow:var(--shadow)}
+  .kpi.flag{border-color:#f0d8b6; background:#fffaf2}
   .kpi .k{font-size:10.5px; text-transform:uppercase; letter-spacing:.5px; color:var(--faint); font-weight:700}
   .kpi .v{font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:25px; color:var(--blue-900); margin-top:4px; line-height:1.1}
   .kpi .v.sm{font-size:17px}
+  .kpi.flag .v{color:var(--warn)}
+  .kpi .s{font-size:11px; color:var(--muted); margin-top:2px}
 
-  /* ============ Tarjetas de contratistas ============ */
-  .cgrid{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px}
-  .ccard{padding:16px 18px; display:flex; flex-direction:column}
-  .ccard .top{display:flex; justify-content:space-between; align-items:flex-start; gap:8px}
-  .ccard h3{font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:18px; color:var(--blue-900); margin:0}
-  .ccard .meta{font-size:12px; color:var(--muted); margin-top:1px}
-  .ccard .pct{font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:18px; color:var(--teal)}
-  .mbar{display:flex; height:10px; border-radius:5px; overflow:hidden; background:var(--blue-50); margin:12px 0 8px}
-  .mbar i{display:block; height:100%}
+  .cards{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px}
+  .cc{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); padding:15px 17px}
+  .cc .top{display:flex; justify-content:space-between; align-items:flex-start}
+  .cc h3{font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:18px; color:var(--blue-900); margin:0}
+  .cc .sub{font-size:11.5px; color:var(--muted)}
+  .cc .pct{font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:15px; color:var(--teal)}
+  .cc .bar{display:flex; height:9px; border-radius:6px; overflow:hidden; margin:11px 0 8px; background:var(--blue-50)}
+  .cc .bar i{display:block; height:100%}
   .seg-ent{background:var(--teal)} .seg-pro{background:var(--amber)} .seg-dis{background:var(--disp)}
-  .ccard .figs{display:flex; gap:18px; font-size:12px; color:var(--muted); margin-bottom:12px}
-  .ccard .figs b{display:block; font-family:'IBM Plex Mono',monospace; font-size:15px; color:var(--ink); font-weight:600}
-  .ccard .go{margin-top:auto}
-  .go a, .go button{display:inline-flex; align-items:center; gap:7px; font-family:'Manrope'; font-size:13px; font-weight:700; border-radius:var(--radius-sm); padding:9px 15px; cursor:pointer; text-decoration:none; border:1px solid transparent}
-  .go .active-link{background:var(--blue-700); color:#fff}
-  .go .active-link:hover{background:var(--blue-600)}
-  .go .muted-link{background:#fff; border-color:var(--line); color:var(--faint); cursor:default}
+  .cc .meta{display:flex; gap:14px; font-size:11.5px; color:var(--muted)}
+  .cc .link{margin-top:11px}
+  .cc a.open{display:inline-block; font-size:12.5px; font-weight:700; color:#fff; background:var(--blue-700); border-radius:7px; padding:6px 13px; text-decoration:none}
+  .cc a.open:hover{background:var(--blue-600)}
+  .cc .soon{font-size:12px; color:var(--faint); font-style:italic}
 
-  /* ============ Tabla maestra ============ */
-  .tablecard{overflow:hidden}
-  table.master{width:100%; border-collapse:collapse}
-  table.master thead th{font-size:10.5px; text-transform:uppercase; letter-spacing:.5px; color:var(--muted); font-weight:700; text-align:right; padding:11px 14px; background:var(--surface); border-bottom:1px solid var(--line); white-space:nowrap}
-  table.master thead th.l{text-align:left}
-  table.master tbody td{padding:12px 14px; border-bottom:1px solid var(--line); font-size:13.5px; text-align:right; vertical-align:middle}
-  table.master tbody td.l{text-align:left}
-  table.master tbody tr:last-child td{border-bottom:0}
-  .cnum{font-family:'IBM Plex Mono',monospace; font-weight:600; color:var(--blue-800)}
-  .cell-bar{width:170px}
-  .cell-bar .mbar{margin:0; width:150px}
-  .pctcell{font-family:'IBM Plex Mono',monospace; font-weight:600; color:var(--teal)}
-  .legend{display:flex; gap:16px; flex-wrap:wrap; font-size:12px; color:var(--muted); margin:10px 2px 0}
-  .legend span{display:inline-flex; align-items:center; gap:6px}
-  .dot{width:10px; height:10px; border-radius:3px; display:inline-block}
-  .foot-note{font-size:12px; color:var(--faint); margin:8px 2px 0}
+  .tablecard{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden}
+  table.data{width:100%; border-collapse:collapse}
+  table.data thead th{font-size:10.5px; text-transform:uppercase; letter-spacing:.5px; color:var(--muted); font-weight:700; text-align:right; padding:11px 14px; background:#f6f9fc; border-bottom:1px solid var(--line)}
+  table.data thead th.l{text-align:left}
+  table.data tbody td{padding:11px 14px; border-bottom:1px solid var(--line); font-size:13.5px; text-align:right; vertical-align:middle}
+  table.data tbody td.l{text-align:left}
+  table.data tbody tr:last-child td{border-bottom:0}
+  .cnum{font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:15px; color:var(--blue-900)}
+  .cnum small{display:block; font-family:'Manrope'; font-weight:500; font-size:11px; color:var(--faint)}
+  .minibar{display:flex; height:8px; width:130px; border-radius:5px; overflow:hidden; background:var(--blue-50); margin-left:auto}
+  .minibar i{display:block; height:100%}
 
-  /* ============ Chips de estado ============ */
-  .chip{display:inline-block; font-size:11px; font-weight:700; padding:3px 9px; border-radius:20px; white-space:nowrap}
+  .filters{display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:0 2px 14px}
+  .pill-f{font-family:'Manrope'; font-size:12.5px; font-weight:600; cursor:pointer; border:1px solid var(--line); background:#fff; color:var(--muted); border-radius:20px; padding:6px 13px}
+  .pill-f.active{background:var(--blue-700); color:#fff; border-color:var(--blue-700)}
+  .filters select{font-family:'Manrope'; font-size:12.5px; font-weight:600; border:1px solid var(--line); border-radius:7px; padding:6px 10px; background:#fff; color:var(--ink)}
+  .filters .sp{margin-left:auto}
+
+  #bandejaBody tr{cursor:pointer; transition:background .12s}
+  #bandejaBody tr:hover{background:var(--blue-50)}
+  .folio{font-family:'IBM Plex Mono',monospace; font-weight:600; color:var(--blue-800)}
+  .chip{display:inline-block; font-size:11.5px; font-weight:700; padding:3px 10px; border-radius:20px; white-space:nowrap}
   .c-solicitado{background:#eef1f4; color:#56646f} .c-confirmado{background:var(--blue-50); color:var(--blue-700)}
   .c-transito{background:#fbefda; color:#9a6516} .c-entregado{background:#e1f1ee; color:#0e7163}
   .c-conciliado{background:#e7f3e8; color:#2c7a39} .c-parcial{background:#f7e7e0; color:#a8501f}
+  .needs{display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--warn); margin-right:7px; vertical-align:middle}
+  .empty{padding:24px 16px; text-align:center; color:var(--faint); font-size:13px}
 
-  /* ============ Requisiciones ============ */
-  .toolbar{display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:14px}
-  .roletoggle{display:inline-flex; background:#e6edf3; border:1px solid var(--line); border-radius:var(--radius-sm); padding:3px}
-  .roletoggle button{font-family:'Manrope'; font-weight:700; font-size:13px; border:0; background:transparent; color:var(--muted); padding:7px 16px; border-radius:7px; cursor:pointer}
-  .roletoggle button.active{background:#fff; color:var(--blue-800); box-shadow:0 1px 2px rgba(0,0,0,.08)}
-  .reqfilters{display:flex; gap:8px; flex-wrap:wrap}
-  .reqfilters select{font-family:'Manrope'; font-size:13px; font-weight:600; border:1px solid var(--line); border-radius:7px; padding:7px 10px; background:#fff; color:var(--ink)}
-  .reqlayout{display:grid; grid-template-columns:minmax(0,360px) minmax(0,1fr); gap:12px; align-items:start}
+  .catnote{font-size:13px; color:var(--muted); background:var(--blue-50); border:1px solid var(--blue-100); border-radius:var(--radius); padding:14px 16px; margin-top:14px}
+  .recipe{font-family:'IBM Plex Mono',monospace; font-weight:600; color:var(--blue-800)}
 
-  .bandeja{padding:6px; max-height:600px; overflow:auto}
-  .bitem{padding:12px 14px; border-radius:var(--radius-sm); cursor:pointer; border:1px solid transparent}
-  .bitem + .bitem{margin-top:2px}
-  .bitem:hover{background:var(--blue-50)}
-  .bitem.sel{background:var(--blue-50); border-color:var(--blue-100)}
-  .bitem .r1{display:flex; justify-content:space-between; gap:8px; align-items:center}
-  .bitem .folio{font-family:'IBM Plex Mono',monospace; font-weight:600; color:var(--blue-800); font-size:13px}
-  .bitem .r2{display:flex; justify-content:space-between; gap:8px; margin-top:4px; font-size:12px; color:var(--muted)}
-  .actiondot{width:8px; height:8px; border-radius:50%; background:var(--amber); display:inline-block; margin-left:6px; vertical-align:middle}
+  /* Modal */
+  .modal-ov{position:fixed; inset:0; background:rgba(10,30,55,.5); display:none; align-items:flex-start; justify-content:center; padding:42px 16px; z-index:60; overflow:auto}
+  .modal-ov.show{display:flex; animation:fade .2s ease}
+  .modal{background:#fff; border-radius:16px; max-width:780px; width:100%; box-shadow:0 24px 70px rgba(8,28,50,.4); animation:pop .26s ease}
+  .modal-h{display:flex; justify-content:space-between; align-items:flex-start; gap:14px; padding:22px 26px 18px; border-bottom:1px solid var(--line)}
+  .modal-h .hl{font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--amber); font-weight:700}
+  .modal-h h3{font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:24px; color:var(--blue-900); margin:3px 0 4px}
+  .modal-h .msub{font-size:13px; color:var(--muted)}
+  .modal-h .right{display:flex; align-items:center; gap:12px; flex:none}
+  .modal-close{width:32px; height:32px; border-radius:9px; border:1px solid var(--line); background:#fff; color:var(--muted); font-size:16px; cursor:pointer; line-height:1}
+  .modal-close:hover{background:#f4f7fa; color:var(--ink)}
+  .modal-body{padding:20px 26px 24px}
+  .mdates{display:flex; flex-wrap:wrap; gap:26px; margin-bottom:16px}
+  .mdates .meta span{display:block; font-size:11px; text-transform:uppercase; letter-spacing:.5px; color:var(--faint); font-weight:600; margin-bottom:2px}
+  .mdates .meta b{font-size:14px; font-weight:600; color:var(--ink)}
+  .modal-body table{width:100%; border-collapse:collapse}
+  .modal-body thead th{font-size:10.5px; text-transform:uppercase; letter-spacing:.4px; color:var(--muted); font-weight:700; text-align:right; padding:9px 12px; background:#f6f9fc; border-bottom:1px solid var(--line)}
+  .modal-body thead th.l{text-align:left}
+  .modal-body tbody td{padding:9px 12px; border-bottom:1px solid var(--line); font-size:13.5px; text-align:right}
+  .modal-body tbody td.l{text-align:left; font-weight:600; color:var(--blue-900)}
+  .modal-tot{margin-top:12px; margin-left:auto; max-width:260px}
+  .tline{display:flex; justify-content:space-between; font-size:13.5px; padding:4px 0; color:var(--muted)}
+  .tline .num{color:var(--ink)}
+  .tline.grand{border-top:2px solid var(--blue-900); margin-top:5px; padding-top:9px; font-size:16px; font-weight:700; color:var(--blue-900)}
+  .tline.grand .num{color:var(--blue-900); font-weight:700}
 
-  .detalle{padding:18px 20px; min-height:340px}
-  .dhead{display:flex; justify-content:space-between; align-items:flex-start; gap:10px; border-bottom:1px solid var(--line); padding-bottom:14px; margin-bottom:14px}
-  .dhead h3{font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:20px; margin:0; color:var(--blue-900)}
-  .dhead .meta{font-size:12.5px; color:var(--muted); margin-top:3px}
-  .dfechas{display:flex; gap:24px; flex-wrap:wrap; margin-bottom:14px; align-items:flex-end}
-  .dfechas .f span{display:block; color:var(--faint); text-transform:uppercase; letter-spacing:.5px; font-weight:600; font-size:10.5px}
-  .dfechas .f b{font-size:13.5px; color:var(--ink)}
-  .otif{font-size:11px; font-weight:700; padding:3px 9px; border-radius:20px}
-  .otif.ok{background:#e4f2ea; color:#137a4d} .otif.late{background:#f7e7e6; color:#9a3333}
+  .modal-sub-h{font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:13px; color:var(--blue-900); text-transform:uppercase; letter-spacing:.6px; margin:22px 0 10px}
+  .act{background:var(--action); border:1px solid var(--blue-100); border-radius:var(--radius); padding:16px 18px}
+  .act.logi{background:var(--warn-bg); border-color:#f0d8b6}
+  .act.coral{background:var(--coral-bg); border-color:#e9c3b2}
+  .act.done{background:var(--ok-bg); border-color:#bfe0cd}
+  .act-h{font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:14px; color:var(--blue-900); margin-bottom:8px}
+  .act.logi .act-h{color:var(--warn)} .act.coral .act-h{color:#a8501f} .act.done .act-h{color:#0c4f33}
+  .act-note{font-size:13px; color:var(--muted); margin:0 0 12px}
+  .act.logi .act-note, .act.coral .act-note{color:#7a5a30}
+  .act.done .act-note{color:#2c6048; margin-bottom:0}
+  .act-row{display:flex; gap:14px; flex-wrap:wrap; margin-bottom:14px}
+  .minput{flex:1; min-width:170px}
+  .minput label{display:block; font-size:11px; text-transform:uppercase; letter-spacing:.5px; color:var(--faint); font-weight:600; margin-bottom:4px}
+  .minput input{width:100%; font-family:'Manrope'; font-size:14px; font-weight:600; color:var(--ink); border:1px solid var(--line); border-radius:var(--radius-sm); padding:8px 11px; background:#fff}
+  .minput input:focus{outline:none; border-color:var(--blue-600); box-shadow:0 0 0 3px var(--blue-100)}
+  .conc-row{display:flex; justify-content:space-between; align-items:center; padding:10px 14px; border:1px solid var(--line); border-radius:var(--radius-sm); background:#fff; margin-bottom:8px; font-size:13.5px; font-weight:600; color:var(--muted)}
+  .conc-row.ok{border-color:#bfe0cd; background:var(--ok-bg)}
+  .conc-row b{font-weight:700; color:var(--faint)}
+  .conc-row.ok b{color:var(--ok)}
+  button.btn{font-family:'Manrope'; font-weight:700; font-size:14px; cursor:pointer; border-radius:var(--radius-sm); padding:11px 20px; border:1px solid transparent}
+  .btn-primary{background:var(--blue-700); color:#fff; box-shadow:0 6px 16px rgba(14,77,139,.25)} .btn-primary:hover{background:var(--blue-600)}
 
-  table.lineas{width:100%; border-collapse:collapse; margin-bottom:16px}
-  table.lineas th{font-size:10.5px; text-transform:uppercase; letter-spacing:.5px; color:var(--muted); font-weight:700; text-align:right; padding:7px 10px; border-bottom:1px solid var(--line)}
-  table.lineas th.l{text-align:left}
-  table.lineas td{padding:8px 10px; border-bottom:1px solid var(--line); font-size:13.5px; text-align:right}
-  table.lineas td.l{text-align:left; font-weight:600; color:var(--blue-900)}
+  .bita{display:flex; flex-direction:column; gap:0}
+  .bita-item{display:flex; gap:12px; padding:10px 0; border-bottom:1px dashed var(--line); font-size:13px}
+  .bita-item:last-child{border-bottom:0}
+  .bita-dot{width:9px; height:9px; border-radius:50%; background:var(--blue-600); margin-top:5px; flex:none}
+  .bita-item .when{font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:var(--faint); min-width:54px}
+  .bita-item .who2{font-weight:700; color:var(--blue-900)}
+  .bita-item .txt{color:var(--muted)}
 
-  /* Zonas de acción: fondo azul para distinguir de lo informativo */
-  .actionbox{background:var(--action); border:1px solid var(--blue-100); border-radius:var(--radius-sm); padding:14px 16px; margin-bottom:14px}
-  .actionbox h4{font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:13px; margin:0 0 10px; color:var(--blue-900)}
-  .actionbox .row{display:flex; gap:10px; flex-wrap:wrap; align-items:flex-end}
-  .fld{display:flex; flex-direction:column; gap:4px}
-  .fld label{font-size:10.5px; text-transform:uppercase; letter-spacing:.5px; color:var(--faint); font-weight:600}
-  .fld input{font-family:'Manrope'; font-size:13.5px; font-weight:600; color:var(--ink); border:1px solid var(--line); border-radius:7px; padding:7px 9px; background:#fff}
-  .fld input:focus{outline:none; border-color:var(--blue-600); box-shadow:0 0 0 3px var(--blue-100)}
-  .qy{width:64px; text-align:center; font-family:'IBM Plex Mono',monospace}
-  .btn{font-family:'Manrope',sans-serif; font-weight:700; font-size:13.5px; cursor:pointer; border-radius:var(--radius-sm); padding:9px 16px; border:1px solid transparent}
-  .btn-primary{background:var(--blue-700); color:#fff} .btn-primary:hover{background:var(--blue-600)}
-  .btn-ghost{background:#fff; border-color:var(--line); color:var(--muted)} .btn-ghost:hover{background:#f4f7fa}
-  .btn-go{background:var(--green); color:#fff} .btn-go:hover{filter:brightness(.95)}
-  .muted-note{font-size:12.5px; color:var(--faint); font-style:italic}
-
-  .concilia{display:flex; gap:14px; flex-wrap:wrap; align-items:center; background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-sm); padding:12px 16px; margin-bottom:14px}
-  .concilia-action{background:var(--action); border-color:var(--blue-100)}
-  .cstat{font-size:12.5px; font-weight:600; color:var(--muted)}
-
-  /* Bitácora y entregas: alineadas a la izquierda */
-  .bitacora h4{font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:13px; margin:0 0 8px; color:var(--blue-900)}
-  .note-i{display:flex; gap:11px; padding:9px 0; border-bottom:1px dashed var(--line); font-size:13px; text-align:left}
-  .note-i:last-child{border-bottom:0}
-  .note-i .nrole{font-weight:700; color:var(--blue-800); white-space:nowrap; min-width:96px}
-  .note-i .dt{color:var(--faint); font-size:11.5px}
-  .noteadd{display:flex; gap:8px; margin-top:10px}
-  .noteadd input{flex:1; font-family:'Manrope'; font-size:13px; border:1px solid var(--line); border-radius:7px; padding:8px 10px}
-  .noteadd input:focus{outline:none; border-color:var(--blue-600); box-shadow:0 0 0 3px var(--blue-100)}
-  .empty{padding:40px 24px; text-align:center; color:var(--faint); font-size:13px}
-
-  /* ============ Placeholder ============ */
-  .placeholder{padding:40px 24px; text-align:center; color:var(--muted)}
-  .placeholder h3{font-family:'Bricolage Grotesque',sans-serif; color:var(--blue-900); font-size:18px; margin:0 0 8px}
-  .placeholder p{margin:0 auto; max-width:520px; font-size:13.5px}
-
-  /* ============ Responsive ============ */
-  @media(max-width:1000px){.kpis{grid-template-columns:repeat(3,1fr)} .cgrid{grid-template-columns:repeat(2,1fr)}}
-  @media(max-width:860px){.reqlayout{grid-template-columns:1fr} .bandeja{max-height:320px}}
-  @media(max-width:760px){
-    .topnav{gap:10px; padding:12px 14px}
-    .who{margin-left:0; order:2} .nav{order:3; width:100%}
-    .main{padding:18px 14px 50px} .cgrid{grid-template-columns:1fr} .kpis{grid-template-columns:repeat(2,1fr)}
-  }
+  @keyframes fade{from{opacity:0}to{opacity:1}}
+  @keyframes pop{from{opacity:0; transform:translateY(-10px) scale(.99)}to{opacity:1; transform:none}}
   @keyframes rise{from{opacity:0; transform:translateY(-6px)}to{opacity:1; transform:none}}
+  @media(max-width:1000px){.kpis{grid-template-columns:repeat(3,1fr)} .cards{grid-template-columns:1fr 1fr}}
+  @media(max-width:760px){.topnav{gap:10px; padding:12px 14px} .who{margin-left:0; order:2} .nav{order:3; width:100%} .main{padding:18px 14px 50px} .cards{grid-template-columns:1fr}}
+  @media(max-width:520px){.kpis{grid-template-columns:repeat(2,1fr)}}
 </style>
 </head>
 <body>
-<div class="app">
 
   <header class="topnav">
-    <div class="brand"><div class="mark">P</div><div><h1>Prefabricados de Pachuca</h1><p>Portal maestro · PREPA backoffice</p></div></div>
+    <div class="brand"><div class="mark">P</div><div><h1>Prefabricados de Pachuca</h1><p>Portal de backoffice</p></div></div>
     <nav class="nav">
       <button data-sec="maestro" class="active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>Maestro</button>
       <button data-sec="requisiciones"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>Requisiciones</button>
-      <button data-sec="alta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>Alta</button>
+      <button data-sec="catalogo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>Catálogo</button>
     </nav>
-    <div class="who"><b>Backoffice</b><span>PREPA · CESVIN</span></div>
+    <div class="who"><b>Backoffice</b><span>PREPA</span></div>
   </header>
 
   <main class="main">
@@ -197,487 +186,416 @@
 
     <!-- ===== Maestro ===== -->
     <section class="section active" id="sec-maestro">
-      <p class="ctx">Desarrollador <b>CESVIN</b> · un desarrollo · <b id="ctx-contratistas">0</b> contratistas · <b id="ctx-contratos">0</b> contratos</p>
+      <div class="ffilter" id="ffilterM"></div>
       <div class="kpis" id="kpis"></div>
-
       <div class="sectitle">Contratistas</div>
-      <div class="cgrid" id="cards"></div>
-      <p class="foot-note">En la demo solo ICMEC tiene su portal cargado; en producción cada tarjeta abre el portal del contratista correspondiente.</p>
-
-      <div class="sectitle">Tabla maestra del desarrollo</div>
-      <div class="card tablecard">
-        <table class="master">
-          <thead><tr>
-            <th class="l">Contrato</th><th class="l">Contratista</th><th class="l">Etapa</th>
-            <th class="l">Avance</th><th>%</th><th>Autorizado</th><th>Ejercido</th>
-          </tr></thead>
-          <tbody id="masterBody"></tbody>
-        </table>
-      </div>
-      <div class="legend">
-        <span><i class="dot seg-ent"></i>Entregado</span>
-        <span><i class="dot seg-pro"></i>Pedido en proceso</span>
-        <span><i class="dot seg-dis"></i>Por pedir</span>
-      </div>
+      <div class="cards" id="contratistas"></div>
+      <div class="sectitle">Contratos y avance</div>
+      <div class="tablecard"><table class="data"><thead><tr><th class="l">Contrato · lote</th><th class="l">Contratista</th><th class="l">Proyecto · fraccionamiento</th><th class="l">Avance (losas)</th><th>Entreg/Ped/Aut</th><th>Importe ejercido</th></tr></thead><tbody id="maestroBody"></tbody></table></div>
     </section>
 
     <!-- ===== Requisiciones ===== -->
     <section class="section" id="sec-requisiciones">
-      <div class="toolbar">
-        <div class="roletoggle" id="roletoggle">
-          <button data-rol="backoffice" class="active">Backoffice</button>
-          <button data-rol="logistica">Logística</button>
-        </div>
-        <div class="reqfilters">
-          <select id="fContratista"><option value="todos">Todos los contratistas</option></select>
-          <select id="fEstadoReq">
-            <option value="todos">Todos los estados</option>
-            <option>Solicitado</option><option>Confirmado</option><option>En tránsito</option><option>Parcial</option><option>Entregado</option><option>Conciliado</option>
-          </select>
-          <select id="fPeriodo">
-            <option value="todas">Todas las fechas</option>
-            <option value="semana">Esta semana</option>
-            <option value="mes">Este mes</option>
-          </select>
-        </div>
+      <div class="ffilter" id="ffilterR"></div>
+      <div class="filters" id="filtersR">
+        <button class="pill-f active" data-e="todos">Todos los estados</button>
+        <button class="pill-f" data-e="Solicitado">Solicitado</button>
+        <button class="pill-f" data-e="Confirmado">Confirmado</button>
+        <button class="pill-f" data-e="En tránsito">En tránsito</button>
+        <button class="pill-f" data-e="Parcial">Parcial</button>
+        <button class="pill-f" data-e="Entregado">Entregado</button>
+        <button class="pill-f" data-e="Conciliado">Conciliado</button>
+        <select id="fContratista" class="sp"></select>
       </div>
-      <div class="reqlayout">
-        <div class="card bandeja" id="bandeja"></div>
-        <div class="card detalle" id="detalle"></div>
-      </div>
+      <div class="tablecard"><table class="data"><thead><tr><th class="l">Folio OC</th><th class="l">Solicitud</th><th class="l">Contratista</th><th class="l">Contrato · lote</th><th class="l">Losas</th><th>Monto</th><th class="l">Estado</th></tr></thead><tbody id="bandejaBody"></tbody></table></div>
     </section>
 
-    <!-- ===== Alta (placeholder) ===== -->
-    <section class="section" id="sec-alta">
-      <div class="card placeholder">
-        <h3>Alta · en construcción</h3>
-        <p>Aquí va la configuración: catálogos (productos, precios y contratistas), captura del plan línea por línea, validación de gerencia comercial, generar portal y dar de alta usuarios con su rol (responsable o recibe) y documentos.</p>
-      </div>
+    <!-- ===== Catálogo ===== -->
+    <section class="section" id="sec-catalogo">
+      <div class="sectitle">Catálogo de modelos · receta de losas y precio por losa</div>
+      <div class="tablecard"><table class="data"><thead><tr><th class="l">Modelo</th><th class="l">Receta por casa</th><th>Losas por casa</th><th>P.U. entrepiso</th><th>P.U. azotea</th></tr></thead><tbody id="catBody"></tbody></table></div>
+      <div class="catnote">Esta es la base desde la que se calcula todo: cada casa de un modelo aporta sus losas de entrepiso y de azotea, y el precio vive en la losa. El alta de contratos (contratista, lote, rango de casas y casas por modelo) que genera el inventario en losas es el siguiente paso.</div>
     </section>
-
   </main>
-</div>
+
+  <div class="modal-ov" id="modalOv"><div class="modal" id="modalCard"></div></div>
 
 <script>
 "use strict";
 
-/* =========================================================
-   DATOS  (en producción vendrían del backend)
-   ========================================================= */
+/* ===================== DATOS ===================== */
 const IVA = 0.16;
-const HOY = new Date('2026-05-30T00:00:00');
-const hoyISO = '2026-05-30';
 
-const CATALOGO = {
-  palma:{nombre:'Palma',precio:11770.43+12135.73}, palermo:{nombre:'Palermo',precio:10676.84+13246.44},
-  cartagena:{nombre:'Cartagena',precio:14613.30+16211.05}, jerez:{nombre:'Jerez',precio:8921.92+10042.65},
-  sevilla:{nombre:'Sevilla',precio:21450.00}, verona:{nombre:'Verona',precio:27800.00},
+const MODELOS = {
+  palma:    {nombre:'Palma',     ent:1, az:1, pEnt:11770.43, pAz:12135.73},
+  palermo:  {nombre:'Palermo',   ent:1, az:1, pEnt:10676.84, pAz:13246.44},
+  cartagena:{nombre:'Cartagena', ent:2, az:1, pEnt:14613.30, pAz:16211.05},
+  jerez:    {nombre:'Jerez',     ent:1, az:1, pEnt:8921.92,  pAz:10042.65},
+  sevilla:  {nombre:'Sevilla',   ent:2, az:1, pEnt:13200.00, pAz:14800.00},
+  verona:   {nombre:'Verona',    ent:2, az:1, pEnt:16500.00, pAz:18400.00},
 };
 
-// Un solo desarrollo de CESVIN, repartido en etapas/privadas y contratistas.
+const CONTRATISTAS = [
+  {nombre:'ICMEC',         prefijo:'IC', portal:'portal-contratista-icmec.html'},
+  {nombre:'Amjova',        prefijo:'AM', portal:null},
+  {nombre:'Alameda',       prefijo:'AL', portal:null},
+  {nombre:'Fasar',         prefijo:'FA', portal:null},
+  {nombre:'Power Pachuca', prefijo:'PP', portal:null},
+  {nombre:'Uligab',        prefijo:'UL', portal:null},
+];
+
 const CONTRATOS = [
-  {num:'23', contratista:'ICMEC',                  etapa:'Santa Elena', modelos:[{id:'palma',asig:3},{id:'palermo',asig:6},{id:'cartagena',asig:4},{id:'jerez',asig:5}]},
-  {num:'24', contratista:'ICMEC',                  etapa:'Los Álamos',  modelos:[{id:'jerez',asig:8},{id:'cartagena',asig:2},{id:'sevilla',asig:4}]},
-  {num:'25', contratista:'ICMEC',                  etapa:'Roble',       modelos:[{id:'palma',asig:5},{id:'verona',asig:3},{id:'palermo',asig:2}]},
-  {num:'31', contratista:'Constructora del Valle', etapa:'Santa Elena', modelos:[{id:'palma',asig:4},{id:'jerez',asig:6}]},
-  {num:'34', contratista:'Edificadora Anáhuac',    etapa:'Los Álamos',  modelos:[{id:'cartagena',asig:5},{id:'sevilla',asig:3}]},
-  {num:'35', contratista:'Edificadora Anáhuac',    etapa:'Roble',       modelos:[{id:'verona',asig:4},{id:'palermo',asig:3}]},
-  {num:'38', contratista:'Constructora Hulux',     etapa:'Santa Elena', modelos:[{id:'jerez',asig:7},{id:'palma',asig:2}]},
-  {num:'41', contratista:'Grupo Marsa',            etapa:'Roble',       modelos:[{id:'sevilla',asig:5},{id:'verona',asig:2}]},
-  {num:'44', contratista:'Hábitat Norte',          etapa:'Los Álamos',  modelos:[{id:'palermo',asig:5},{id:'cartagena',asig:3}]},
+  {num:'23', contratista:'ICMEC',  proyecto:'Andalucía Residencial', fracc:'Santa Elena', lote:'48', casas:{palma:3, palermo:6, cartagena:4, jerez:5}},
+  {num:'24', contratista:'ICMEC',  proyecto:'Andalucía Residencial', fracc:'Los Álamos',  lote:'52', casas:{jerez:8, cartagena:2, sevilla:4}},
+  {num:'25', contratista:'ICMEC',  proyecto:'Puerta del Sol',        fracc:'Roble',       lote:'60', casas:{palma:5, verona:3, palermo:2}},
+  {num:'28', contratista:'Amjova', proyecto:'Puerta del Sol',        fracc:'Roble',       lote:'47', casas:{palermo:4, jerez:4}},
+  {num:'30', contratista:'Alameda',proyecto:'Puerta del Sol',        fracc:'Roble',       lote:'47', casas:{palma:3, cartagena:3}},
+  {num:'27', contratista:'Fasar',  proyecto:'Puerta del Sol',        fracc:'Roble',       lote:'47', casas:{jerez:6, palermo:3}},
+  {num:'18', contratista:'Alameda',proyecto:'Andalucía Residencial', fracc:'Santa Elena', lote:'48', casas:{sevilla:5, verona:3}},
+  {num:'17', contratista:'Uligab', proyecto:'Andalucía Residencial', fracc:'Los Álamos',  lote:'51', casas:{cartagena:4, palma:6}},
+  {num:'11', contratista:'Power Pachuca', proyecto:'Andalucía Residencial', fracc:'Santa Elena', lote:'10', casas:{jerez:5}},
 ];
-const PREFIJO = {
-  'ICMEC':'IC', 'Constructora del Valle':'CV', 'Edificadora Anáhuac':'EA',
-  'Constructora Hulux':'HX', 'Grupo Marsa':'GM', 'Hábitat Norte':'HN',
-};
-const PORTAL_URL = {'ICMEC':'portal-contratista-icmec.html'};
 
-/* Órdenes con su ciclo de vida. Las entregas son una lista de eventos:
-   tipo 'entrega' | 'complemento' cuentan para el pendiente; 'reposicion' NO. */
+// Requisiciones: líneas en losas. conc = doble check. remisiones = entregas de logística. bitacora = historial.
 const PEDIDOS = [
-  {id:'o1', folio:'IC-07', contrato:'23', fecha:'2026-05-08', estado:'Conciliado',  promesa:'2026-05-12', real:'2026-05-12', concilia:{contratista:true,backoffice:true},
-    lineas:[{id:'jerez',casas:1,entregadas:0}],
-    eventos:[{tipo:'entrega',fecha:'2026-05-12',lineas:[{id:'jerez',casas:1}]}],
-    bitacora:[{rol:'Backoffice',fecha:'2026-05-08',texto:'Confirmado. Folio IC-07, notificado.'},{rol:'Logística',fecha:'2026-05-12',texto:'Entrega completa.'},{rol:'Sistema',fecha:'2026-05-13',texto:'Conciliado (doble confirmación).'}]},
-  {id:'o2', folio:'IC-09', contrato:'23', fecha:'2026-05-12', estado:'Parcial',     promesa:'2026-05-18', real:'2026-05-19', concilia:{contratista:false,backoffice:false},
-    lineas:[{id:'palermo',casas:2,entregadas:0},{id:'cartagena',casas:1,entregadas:0}],
-    eventos:[{tipo:'entrega',fecha:'2026-05-19',lineas:[{id:'palermo',casas:1},{id:'cartagena',casas:1}]}],
-    bitacora:[{rol:'Logística',fecha:'2026-05-19',texto:'Entrega parcial: faltó 1 Palermo, se surte por complemento.'}]},
-  {id:'o3', folio:'CV-19', contrato:'31', fecha:'2026-05-16', estado:'En tránsito', promesa:'2026-05-30', real:'', concilia:{contratista:false,backoffice:false},
-    lineas:[{id:'jerez',casas:2,entregadas:0}], eventos:[],
-    bitacora:[{rol:'Logística',fecha:'2026-05-30',texto:'Salió a obra.'}]},
-  {id:'o4', folio:'IC-12', contrato:'24', fecha:'2026-05-16', estado:'En tránsito', promesa:'2026-05-30', real:'', concilia:{contratista:false,backoffice:false},
-    lineas:[{id:'jerez',casas:2,entregadas:0}], eventos:[], bitacora:[]},
-  {id:'o5', folio:'EA-21', contrato:'34', fecha:'2026-05-18', estado:'Entregado',   promesa:'2026-05-24', real:'2026-05-24', concilia:{contratista:true,backoffice:false},
-    lineas:[{id:'cartagena',casas:2,entregadas:0}],
-    eventos:[{tipo:'entrega',fecha:'2026-05-24',lineas:[{id:'cartagena',casas:2}]}],
-    bitacora:[{rol:'Logística',fecha:'2026-05-24',texto:'Entrega completa.'},{rol:'Contratista',fecha:'2026-05-25',texto:'Confirmó en su portal que coincide con la realidad.'}]},
-  {id:'o6', folio:'HX-22', contrato:'38', fecha:'2026-05-20', estado:'Conciliado',  promesa:'2026-05-26', real:'2026-05-25', concilia:{contratista:true,backoffice:true},
-    lineas:[{id:'jerez',casas:3,entregadas:0}],
-    eventos:[{tipo:'entrega',fecha:'2026-05-25',lineas:[{id:'jerez',casas:3}]}],
-    bitacora:[{rol:'Sistema',fecha:'2026-05-27',texto:'Conciliado (doble confirmación).'}]},
-  {id:'o7', folio:'IC-15', contrato:'23', fecha:'2026-05-20', estado:'Confirmado',  promesa:'2026-06-02', real:'', concilia:{contratista:false,backoffice:false},
-    lineas:[{id:'palma',casas:1,entregadas:0},{id:'jerez',casas:1,entregadas:0}], eventos:[],
-    bitacora:[{rol:'Backoffice',fecha:'2026-05-20',texto:'Confirmado. Folio IC-15, promesa 02 jun, notificado.'}]},
-  {id:'o8', folio:'—', contrato:'41', fecha:'2026-05-28', estado:'Solicitado', promesa:'', real:'', concilia:{contratista:false,backoffice:false},
-    lineas:[{id:'sevilla',casas:2,entregadas:0}], eventos:[], bitacora:[]},
-  {id:'o9', folio:'—', contrato:'44', fecha:'2026-05-29', estado:'Solicitado', promesa:'', real:'', concilia:{contratista:false,backoffice:false},
-    lineas:[{id:'palermo',casas:2,entregadas:0}], eventos:[], bitacora:[]},
-  {id:'o10', folio:'—', contrato:'25', fecha:'2026-05-29', estado:'Solicitado', promesa:'', real:'', concilia:{contratista:false,backoffice:false},
-    lineas:[{id:'verona',casas:1,entregadas:0}], eventos:[], bitacora:[]},
+  {id:'r1', folio:'—', contrato:'23', fecha:'2026-05-28', promesa:'', estado:'Solicitado',
+   lineas:[{m:'palermo',t:'ent',losas:2,ent:0},{m:'cartagena',t:'ent',losas:1,ent:0}],
+   remisiones:[], conc:{cliente:false,nosotros:false},
+   bitacora:[{w:'28 may',a:'ICMEC',t:'Requerimiento enviado a PREPA'}]},
+
+  {id:'r2', folio:'IC-15', contrato:'23', fecha:'2026-05-20', promesa:'2026-06-04', estado:'Confirmado',
+   lineas:[{m:'palma',t:'ent',losas:1,ent:0},{m:'jerez',t:'ent',losas:1,ent:0}],
+   remisiones:[], conc:{cliente:false,nosotros:false},
+   bitacora:[{w:'20 may',a:'ICMEC',t:'Requerimiento enviado'},{w:'21 may',a:'Backoffice',t:'Confirmado · folio IC-15 · promesa 04 jun'}]},
+
+  {id:'r3', folio:'IC-12', contrato:'24', fecha:'2026-05-16', promesa:'2026-05-30', estado:'En tránsito',
+   lineas:[{m:'jerez',t:'ent',losas:2,ent:0}],
+   remisiones:[], conc:{cliente:false,nosotros:false},
+   bitacora:[{w:'16 may',a:'ICMEC',t:'Requerimiento enviado'},{w:'17 may',a:'Backoffice',t:'Confirmado · folio IC-12 · promesa 30 may'},{w:'29 may',a:'Backoffice',t:'Salida a obra registrada'}]},
+
+  {id:'r4', folio:'AM-09', contrato:'28', fecha:'2026-05-12', promesa:'2026-05-19', estado:'Parcial',
+   lineas:[{m:'palermo',t:'ent',losas:3,ent:2},{m:'jerez',t:'ent',losas:2,ent:2}],
+   remisiones:[{num:'R-5521',fecha:'2026-05-19',nota:'Faltó 1 losa de entrepiso Palermo'}], conc:{cliente:false,nosotros:false},
+   bitacora:[{w:'12 may',a:'Amjova',t:'Requerimiento enviado'},{w:'13 may',a:'Backoffice',t:'Confirmado · folio AM-09 · promesa 19 may'},{w:'18 may',a:'Backoffice',t:'Salida a obra registrada'},{w:'19 may',a:'Logística',t:'Entrega parcial · remisión R-5521 · faltó 1 entrepiso Palermo'}]},
+
+  {id:'r5', folio:'IC-07', contrato:'23', fecha:'2026-05-08', promesa:'2026-05-12', estado:'Entregado',
+   lineas:[{m:'jerez',t:'az',losas:1,ent:1}],
+   remisiones:[{num:'R-5500',fecha:'2026-05-12',nota:''}], conc:{cliente:true,nosotros:false},
+   bitacora:[{w:'08 may',a:'ICMEC',t:'Requerimiento enviado'},{w:'09 may',a:'Backoffice',t:'Confirmado · folio IC-07 · promesa 12 may'},{w:'11 may',a:'Backoffice',t:'Salida a obra registrada'},{w:'12 may',a:'Logística',t:'Entrega completa · remisión R-5500'},{w:'13 may',a:'ICMEC',t:'Cliente concilió: coincide con la realidad'}]},
+
+  {id:'r6', folio:'FA-03', contrato:'27', fecha:'2026-05-05', promesa:'2026-05-09', estado:'Conciliado',
+   lineas:[{m:'jerez',t:'ent',losas:3,ent:3}],
+   remisiones:[{num:'R-5470',fecha:'2026-05-09',nota:''}], conc:{cliente:true,nosotros:true},
+   bitacora:[{w:'05 may',a:'Fasar',t:'Requerimiento enviado'},{w:'06 may',a:'Backoffice',t:'Confirmado · folio FA-03 · promesa 09 may'},{w:'08 may',a:'Backoffice',t:'Salida a obra registrada'},{w:'09 may',a:'Logística',t:'Entrega completa · remisión R-5470'},{w:'10 may',a:'Fasar',t:'Cliente concilió'},{w:'10 may',a:'Backoffice',t:'PREPA concilió · orden cerrada'}]},
+
+  {id:'r7', folio:'—', contrato:'30', fecha:'2026-05-29', promesa:'', estado:'Solicitado',
+   lineas:[{m:'palma',t:'ent',losas:2,ent:0}],
+   remisiones:[], conc:{cliente:false,nosotros:false},
+   bitacora:[{w:'29 may',a:'Alameda',t:'Requerimiento enviado a PREPA'}]},
 ];
 
+const ESTADOS = ['Solicitado','Confirmado','En tránsito','Parcial','Entregado','Conciliado'];
 const CHIP = {Solicitado:'c-solicitado',Confirmado:'c-confirmado','En tránsito':'c-transito',Parcial:'c-parcial',Entregado:'c-entregado',Conciliado:'c-conciliado'};
-const ETIQUETA_EVENTO = {entrega:'Entrega inicial', complemento:'Complemento', reposicion:'Reposición por daño'};
+const TIPO = {ent:'Entrepiso', az:'Azotea'};
+// Estados donde backoffice tiene una acción pendiente
+const ACCION_BACKOFFICE = {Solicitado:true, Confirmado:true, Entregado:true};
 
-/* =========================================================
-   HELPERS
-   ========================================================= */
+/* ===================== HELPERS ===================== */
 const $ = id => document.getElementById(id);
+const mxn  = new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN'});
 const mxn0 = new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN',maximumFractionDigits:0});
+const hoyISO = new Date().toISOString().slice(0,10);
+const fechaCorta = d => (!d || d==='—' || d==='') ? '—' : new Intl.DateTimeFormat('es-MX',{day:'2-digit',month:'short'}).format(new Date(d+'T00:00:00'));
+const fechaLarga = d => new Intl.DateTimeFormat('es-MX',{day:'2-digit',month:'long',year:'numeric'}).format(new Date(d+'T00:00:00'));
 const pct = (parte,total) => total>0 ? Math.round(parte/total*100) : 0;
-const fechaCorta = d => (!d) ? '—' : new Intl.DateTimeFormat('es-MX',{day:'2-digit',month:'short'}).format(new Date(d+'T00:00:00'));
-function addDaysISO(n){ const d = new Date(HOY); d.setDate(d.getDate()+n); return d.toISOString().slice(0,10); }
+const width = (parte,total) => total>0 ? (parte/total*100) : 0;
 
-const contratoDe = num => CONTRATOS.find(c => c.num === num);
-const contratistaDe = o => (contratoDe(o.contrato) || {}).contratista || '—';
-const etapaDe = o => (contratoDe(o.contrato) || {}).etapa || '—';
-const ordenPorId = id => PEDIDOS.find(o => o.id === id);
-const montoOrden = o => o.lineas.reduce((s,l)=>s + l.casas*CATALOGO[l.id].precio, 0) * (1+IVA);
-const casasOrden = o => o.lineas.reduce((s,l)=>s+l.casas, 0);
+const contratoPorNum = num => CONTRATOS.find(c => c.num === num);
+const precioLosa = (modelo, tipo) => tipo==='ent' ? MODELOS[modelo].pEnt : MODELOS[modelo].pAz;
+const losasPorCasa = (modelo, tipo) => tipo==='ent' ? MODELOS[modelo].ent : MODELOS[modelo].az;
 
-// Resumen por contrato para el Maestro: casas y montos.
+function autorizadasContrato(c){
+  let s = 0;
+  Object.keys(c.casas).forEach(m => { s += c.casas[m]*(MODELOS[m].ent + MODELOS[m].az); });
+  return s;
+}
 function resumenContrato(c){
-  let asig=0, pedido=0, entregado=0, montoAut=0, montoEje=0;
-  c.modelos.forEach(m => { asig += m.asig; montoAut += m.asig * CATALOGO[m.id].precio; });
-  PEDIDOS.filter(p => p.contrato === c.num).forEach(p => p.lineas.forEach(l => {
-    pedido += l.casas; entregado += l.entregadas; montoEje += l.casas * CATALOGO[l.id].precio;
-  }));
-  return { asig, pedido, entregado, proceso:pedido-entregado, disponible:asig-pedido,
-           montoAut: montoAut*(1+IVA), montoEje: montoEje*(1+IVA) };
+  const aut = autorizadasContrato(c);
+  let pedido=0, entregado=0;
+  PEDIDOS.filter(p => p.contrato === c.num).forEach(p => p.lineas.forEach(l => { pedido += l.losas; entregado += l.ent; }));
+  return {aut, pedido, entregado, proceso:pedido-entregado, disponible:aut-pedido};
 }
-function barHTML(ent, proc, disp, total){
-  const w = v => total>0 ? (v/total*100) : 0;
-  return `<div class="mbar"><i class="seg-ent" style="width:${w(ent)}%"></i><i class="seg-pro" style="width:${w(proc)}%"></i><i class="seg-dis" style="width:${w(disp)}%"></i></div>`;
-}
-function nota(o, rol, texto){ (o.bitacora = o.bitacora || []).push({rol, fecha:hoyISO, texto}); }
-function nextFolioNum(){ let max=0; PEDIDOS.forEach(p => { const m=/-(\d+)/.exec(p.folio); if(m) max=Math.max(max, +m[1]); }); return max+1; }
-function sugerirFolio(contratista){ return (PREFIJO[contratista]||'OC') + '-' + String(nextFolioNum()).padStart(2,'0'); }
+const subtotalPedido = p => p.lineas.reduce((s,l)=>s + l.losas*precioLosa(l.m,l.t), 0);
+const totalPedido = p => subtotalPedido(p) * (1+IVA);
+const losasPedido = p => p.lineas.reduce((s,l)=>s+l.losas, 0);
+const entregadasPedido = p => p.lineas.reduce((s,l)=>s+l.ent, 0);
+const losaTxt = l => `${l.losas} ${TIPO[l.t].toLowerCase()} ${MODELOS[l.m].nombre}`;
 
-// Las entregadas se derivan de los eventos. La reposición NO cuenta para el pendiente.
-function aplicarEventos(o){
-  o.lineas.forEach(l => l.entregadas = 0);
-  (o.eventos || []).forEach(ev => {
-    if(ev.tipo === 'reposicion') return;
-    ev.lineas.forEach(el => { const l = o.lineas.find(x => x.id === el.id); if(l) l.entregadas = Math.min(l.casas, l.entregadas + el.casas); });
-  });
-}
+const fraccionamientos = () => [...new Set(CONTRATOS.map(c => c.fracc))];
+const contratoEnFracc = c => filtroFracc==='todos' || c.fracc === filtroFracc;
+const contratistaObj = nombre => CONTRATISTAS.find(x => x.nombre === nombre);
 
-/* =========================================================
-   NAVEGACIÓN
-   ========================================================= */
+/* ===================== NAVEGACIÓN ===================== */
 const TITULOS = {
-  maestro:       ['Maestro', 'Plan del desarrollo contra la realidad'],
-  requisiciones: ['Requisiciones', 'Bandeja operativa y conciliación'],
-  alta:          ['Alta', 'Catálogos, plan, validación y generación'],
+  maestro:       ['Maestro', 'Control de contratos y avance'],
+  requisiciones: ['Requisiciones', 'Bandeja de órdenes — clic para abrir'],
+  catalogo:      ['Catálogo', 'Modelos, receta de losas y precios'],
 };
 function navTo(sec){
   document.querySelectorAll('.nav button').forEach(b => b.classList.toggle('active', b.dataset.sec === sec));
   document.querySelectorAll('.section').forEach(s => s.classList.toggle('active', s.id === 'sec-'+sec));
   $('secTitle').textContent = TITULOS[sec][0];
   $('secCrumb').textContent = TITULOS[sec][1];
-  if(sec === 'maestro') renderMaestro();
-  if(sec === 'requisiciones') renderReq();
+  if(sec === 'maestro')       renderMaestro();
+  if(sec === 'requisiciones') renderBandeja();
+  if(sec === 'catalogo')      renderCatalogo();
 }
 
-/* =========================================================
-   MAESTRO
-   ========================================================= */
+/* ===================== FILTRO FRACCIONAMIENTO ===================== */
+let filtroFracc = 'todos';
+function renderFiltro(id){
+  const opts = ['todos', ...fraccionamientos()];
+  $(id).innerHTML = opts.map(f => `<button class="fbtn ${f===filtroFracc?'active':''}" data-f="${f}">${f==='todos'?'Todos':f}</button>`).join('');
+}
+
+/* ===================== MAESTRO ===================== */
 function renderMaestro(){
-  const contratistas = [...new Set(CONTRATOS.map(c => c.contratista))];
-  $('ctx-contratistas').textContent = contratistas.length;
-  $('ctx-contratos').textContent = CONTRATOS.length;
+  renderFiltro('ffilterM');
+  const cons = CONTRATOS.filter(contratoEnFracc);
+  const nums = cons.map(c => c.num);
+  const peds = PEDIDOS.filter(p => nums.includes(p.contrato));
 
-  let asig=0, ped=0, ent=0, montoAut=0;
-  CONTRATOS.forEach(c => { const r = resumenContrato(c); asig+=r.asig; ped+=r.pedido; ent+=r.entregado; montoAut+=r.montoAut; });
+  const porConfirmar = peds.filter(p => p.estado==='Solicitado').length;
+  const porEnviar    = peds.filter(p => p.estado==='Confirmado').length;
+  const porConciliar = peds.filter(p => p.estado==='Entregado').length;
+  let aut=0, ent=0, imp=0;
+  cons.forEach(c => { const r = resumenContrato(c); aut += r.aut; ent += r.entregado; });
+  peds.forEach(p => imp += totalPedido(p));
+
   $('kpis').innerHTML = [
-    {k:'Casas del plan', v:asig}, {k:'Pedidas', v:ped}, {k:'Entregadas', v:ent},
-    {k:'Disponibles', v:asig-ped}, {k:'Avance', v:pct(ent,asig)+'%'},
-    {k:'Monto autorizado', v:mxn0.format(montoAut), sm:true},
-  ].map(x => `<div class="kpi"><div class="k">${x.k}</div><div class="v ${x.sm?'sm':''}">${x.v}</div></div>`).join('');
+    {k:'Por confirmar', v:porConfirmar, s:'solicitadas', flag:porConfirmar>0},
+    {k:'Por enviar',    v:porEnviar,    s:'confirmadas', flag:porEnviar>0},
+    {k:'Por conciliar', v:porConciliar, s:'entregadas',  flag:porConciliar>0},
+    {k:'Losas autorizadas', v:aut},
+    {k:'Losas entregadas',  v:ent, s:pct(ent,aut)+'% de avance'},
+    {k:'Importe ejercido',  v:mxn0.format(imp), sm:true, s:'IVA incluido'},
+  ].map(x => `<div class="kpi ${x.flag?'flag':''}"><div class="k">${x.k}</div><div class="v ${x.sm?'sm':''}">${x.v}</div>${x.s?`<div class="s">${x.s}</div>`:''}</div>`).join('');
 
-  $('cards').innerHTML = contratistas.map(nombre => {
-    const suyos = CONTRATOS.filter(c => c.contratista === nombre);
-    let a=0,e=0,p=0,monto=0;
-    suyos.forEach(c => { const r = resumenContrato(c); a+=r.asig; e+=r.entregado; p+=r.pedido; monto+=r.montoAut; });
-    const url = PORTAL_URL[nombre];
-    const acceso = url ? `<a class="active-link" href="${url}">Entrar al portal →</a>`
-                       : `<button class="muted-link" type="button">Portal generado</button>`;
-    return `<div class="card ccard">
-      <div class="top"><div><h3>${nombre}</h3><div class="meta">${suyos.length} contrato${suyos.length>1?'s':''} · CESVIN</div></div><div class="pct">${pct(e,a)}%</div></div>
-      ${barHTML(e,p-e,a-p,a)}
-      <div class="figs"><div>Casas<b>${a}</b></div><div>Entregadas<b>${e}</b></div><div>Monto<b>${mxn0.format(monto)}</b></div></div>
-      <div class="go">${acceso}</div>
+  // Tarjetas de contratistas presentes en el filtro
+  const presentes = [...new Set(cons.map(c => c.contratista))];
+  $('contratistas').innerHTML = presentes.map(nombre => {
+    const cc = cons.filter(c => c.contratista === nombre);
+    let a=0, pr=0, en=0;
+    cc.forEach(c => { const r = resumenContrato(c); a+=r.aut; pr+=r.proceso; en+=r.entregado; });
+    const obj = contratistaObj(nombre);
+    const link = obj && obj.portal ? `<a class="open" href="${obj.portal}">Abrir portal</a>` : `<span class="soon">Portal en preparación</span>`;
+    return `<div class="cc">
+      <div class="top"><div><h3>${nombre}</h3><div class="sub">${cc.length} contrato(s)</div></div><div class="pct">${pct(en,a)}%</div></div>
+      <div class="bar"><i class="seg-ent" style="width:${width(en,a)}%"></i><i class="seg-pro" style="width:${width(pr,a)}%"></i><i class="seg-dis" style="width:${width(a-en-pr,a)}%"></i></div>
+      <div class="meta"><span>Entregado ${en}</span><span>Proceso ${pr}</span><span>Aut ${a}</span></div>
+      <div class="link">${link}</div>
     </div>`;
   }).join('');
 
-  $('masterBody').innerHTML = CONTRATOS.map(c => {
+  $('maestroBody').innerHTML = cons.map(c => {
     const r = resumenContrato(c);
+    let imp = 0; PEDIDOS.filter(p => p.contrato===c.num).forEach(p => imp += totalPedido(p));
     return `<tr>
-      <td class="l"><span class="cnum">${c.num}</span></td>
+      <td class="l"><span class="cnum">C${c.num} · L${c.lote}</span></td>
       <td class="l">${c.contratista}</td>
-      <td class="l">${c.etapa}</td>
-      <td class="l cell-bar">${barHTML(r.entregado, r.proceso, r.disponible, r.asig)}</td>
-      <td class="pctcell">${pct(r.entregado, r.asig)}%</td>
-      <td class="num">${mxn0.format(r.montoAut)}</td>
-      <td class="num">${mxn0.format(r.montoEje)}</td>
+      <td class="l">${c.proyecto} · ${c.fracc}</td>
+      <td class="l"><div class="minibar"><i class="seg-ent" style="width:${width(r.entregado,r.aut)}%"></i><i class="seg-pro" style="width:${width(r.proceso,r.aut)}%"></i><i class="seg-dis" style="width:${width(r.disponible,r.aut)}%"></i></div></td>
+      <td class="num">${r.entregado} / ${r.pedido} / ${r.aut}</td>
+      <td class="num">${mxn0.format(imp)}</td>
     </tr>`;
   }).join('');
 }
 
-/* =========================================================
-   REQUISICIONES
-   ========================================================= */
-let rolActual = 'backoffice';
-let selReq = null;
-let fCon = 'todos', fEst = 'todos', fPer = 'todas';
+/* ===================== REQUISICIONES (BANDEJA) ===================== */
+let filtroEstado = 'todos';
+let filtroContratista = 'todos';
 
-const enSemana = iso => { const d = new Date(iso+'T00:00:00'); const diff = (HOY-d)/86400000; return diff>=0 && diff<7; };
-const enMes = iso => { const d = new Date(iso+'T00:00:00'); return d.getMonth()===HOY.getMonth() && d.getFullYear()===HOY.getFullYear(); };
-
-function needsAction(o){
-  if(rolActual === 'backoffice') return o.estado==='Solicitado' || (o.estado==='Entregado' && o.concilia.contratista && !o.concilia.backoffice);
-  return ['Confirmado','En tránsito','Parcial'].includes(o.estado);
-}
-function ordenesFiltradas(){
-  return PEDIDOS.filter(o =>
-    (fCon==='todos' || contratistaDe(o)===fCon) &&
-    (fEst==='todos' || o.estado===fEst) &&
-    (fPer==='todas' || (fPer==='semana' ? enSemana(o.fecha) : enMes(o.fecha)))
-  );
-}
-
-function renderReq(){
-  document.querySelectorAll('#roletoggle button').forEach(b => b.classList.toggle('active', b.dataset.rol===rolActual));
-  const lista = ordenesFiltradas();
-  if(!selReq || !ordenPorId(selReq)) selReq = lista.length ? lista[0].id : (PEDIDOS[0] && PEDIDOS[0].id);
-
-  $('bandeja').innerHTML = lista.length ? lista.map(o => {
-    const folio = o.folio==='—' ? '<span style="color:var(--faint)">por asignar</span>' : `<span class="folio">${o.folio}</span>`;
-    const dot = needsAction(o) ? '<span class="actiondot" title="Requiere acción de tu rol"></span>' : '';
-    return `<div class="bitem ${o.id===selReq?'sel':''}" onclick="seleccionar('${o.id}')">
-      <div class="r1">${folio}<span class="chip ${CHIP[o.estado]}">${o.estado}</span></div>
-      <div class="r2"><span>${contratistaDe(o)} · C${o.contrato}${dot}</span><span>${fechaCorta(o.fecha)}</span></div>
-    </div>`;
-  }).join('') : `<div class="empty">Sin órdenes para este filtro</div>`;
-
-  renderDetalle(ordenPorId(selReq));
+function renderBandeja(){
+  renderFiltro('ffilterR');
+  const filas = PEDIDOS.filter(p => {
+    const c = contratoPorNum(p.contrato);
+    return contratoEnFracc(c) &&
+      (filtroEstado === 'todos'      || p.estado === filtroEstado) &&
+      (filtroContratista === 'todos' || c.contratista === filtroContratista);
+  });
+  $('bandejaBody').innerHTML = filas.length ? filas.map(p => {
+    const c = contratoPorNum(p.contrato);
+    const folio = p.folio === '—' ? '<span style="color:var(--faint)">por asignar</span>' : `<span class="folio">${p.folio}</span>`;
+    const pend = ACCION_BACKOFFICE[p.estado] && !(p.estado==='Entregado' && p.conc.nosotros);
+    return `<tr onclick="openModal('${p.id}')">
+      <td class="l">${pend?'<span class="needs" title="Requiere tu acción"></span>':''}${folio}</td>
+      <td class="l">${fechaCorta(p.fecha)}</td>
+      <td class="l">${c.contratista}</td>
+      <td class="l">C${p.contrato} · L${c.lote}</td>
+      <td class="l">${p.lineas.map(losaTxt).join(', ')}</td>
+      <td class="num">${mxn.format(totalPedido(p))}</td>
+      <td class="l"><span class="chip ${CHIP[p.estado]}">${p.estado}</span></td>
+    </tr>`;
+  }).join('') : `<tr><td colspan="7" class="empty">Sin requisiciones para este filtro</td></tr>`;
 }
 
-function renderDetalle(o){
-  if(!o){ $('detalle').innerHTML = `<div class="empty">Selecciona una orden de la bandeja</div>`; return; }
-
-  const folio = o.folio==='—' ? 'Por asignar' : o.folio;
-  let otif = '';
-  if(o.real && o.promesa){
-    const aTiempo = new Date(o.real) <= new Date(o.promesa);
-    otif = `<span class="otif ${aTiempo?'ok':'late'}">${aTiempo?'A tiempo':'Con retraso'}</span>`;
-  }
-  const lineas = o.lineas.map(l =>
-    `<tr><td class="l">${CATALOGO[l.id].nombre}</td><td>${l.casas}</td><td>${l.entregadas}</td><td>${l.casas - l.entregadas}</td></tr>`).join('');
-
-  const entregas = (o.eventos||[]).length
-    ? `<div class="bitacora" style="margin-bottom:14px"><h4>Entregas registradas</h4>${o.eventos.map(ev => {
-        const q = ev.lineas.map(e => e.casas + ' ' + CATALOGO[e.id].nombre).join(', ');
-        return `<div class="note-i"><span class="nrole">${ETIQUETA_EVENTO[ev.tipo]}</span><div><div>${q}</div><div class="dt">${fechaCorta(ev.fecha)}</div></div></div>`;
-      }).join('')}</div>`
-    : '';
-
-  const bita = (o.bitacora||[]).length
-    ? o.bitacora.map(n => `<div class="note-i"><span class="nrole">${n.rol}</span><div><div>${n.texto}</div><div class="dt">${fechaCorta(n.fecha)}</div></div></div>`).join('')
-    : `<div class="muted-note">Sin notas todavía.</div>`;
-
-  $('detalle').innerHTML = `
-    <div class="dhead">
-      <div><h3>${folio}</h3><div class="meta">${contratistaDe(o)} · Contrato ${o.contrato} · ${etapaDe(o)}</div></div>
-      <div style="text-align:right"><span class="chip ${CHIP[o.estado]}">${o.estado}</span><div class="meta" style="margin-top:6px">${mxn0.format(montoOrden(o))} · ${casasOrden(o)} casas</div></div>
-    </div>
-    <div class="dfechas">
-      <div class="f"><span>Solicitud</span><b>${fechaCorta(o.fecha)}</b></div>
-      <div class="f"><span>Fecha promesa</span><b>${fechaCorta(o.promesa)}</b></div>
-      <div class="f"><span>Fecha real</span><b>${fechaCorta(o.real)}</b></div>
-      ${otif}
-    </div>
-    <table class="lineas"><thead><tr><th class="l">Modelo</th><th>Pedidas</th><th>Entregadas</th><th>Pendiente</th></tr></thead><tbody>${lineas}</tbody></table>
-    ${entregas}
-    ${buildActions(o)}
-    ${buildConcilia(o)}
-    <div class="bitacora"><h4>Bitácora de seguimiento</h4>${bita}
-      <div class="noteadd"><input id="nota_in" placeholder="Agregar nota como ${rolActual==='backoffice'?'Backoffice':'Logística'}…"><button class="btn btn-ghost" onclick="agregarNota('${o.id}')">Agregar</button></div>
-    </div>`;
+/* ===================== CATÁLOGO ===================== */
+function renderCatalogo(){
+  $('catBody').innerHTML = Object.keys(MODELOS).map(k => {
+    const M = MODELOS[k];
+    return `<tr>
+      <td class="l"><span class="cnum">${M.nombre}</span></td>
+      <td class="l"><span class="recipe">${M.ent} entrepiso + ${M.az} azotea</span></td>
+      <td class="num">${M.ent + M.az}</td>
+      <td class="num">${mxn.format(M.pEnt)}</td>
+      <td class="num">${mxn.format(M.pAz)}</td>
+    </tr>`;
+  }).join('');
 }
 
-// Acciones disponibles según el rol y el estado de la orden.
-function buildActions(o){
-  if(rolActual === 'backoffice'){
-    if(o.estado === 'Solicitado'){
-      return `<div class="actionbox"><h4>Confirmar pedido</h4>
-        <div class="row">
-          <div class="fld"><label>Folio OC</label><input id="cf_folio" value="${sugerirFolio(contratistaDe(o))}"></div>
-          <div class="fld"><label>Fecha promesa</label><input id="cf_promesa" type="date" value="${addDaysISO(8)}"></div>
-          <button class="btn btn-primary" onclick="confirmarOrden('${o.id}')">Confirmar y notificar (WhatsApp)</button>
+/* ===================== MODAL + ACCIONES ===================== */
+function sugFolio(p){
+  const pre = (contratistaObj(contratoPorNum(p.contrato).contratista) || {}).prefijo || 'OC';
+  let max = 0;
+  PEDIDOS.forEach(x => { if(x.folio && x.folio.startsWith(pre+'-')){ const n = parseInt(x.folio.slice(pre.length+1),10); if(!isNaN(n) && n>max) max = n; } });
+  return pre + '-' + String(max+1).padStart(2,'0');
+}
+function defaultPromesa(){ const d = new Date(); d.setDate(d.getDate()+5); return d.toISOString().slice(0,10); }
+
+function accionZona(p){
+  if(p.estado === 'Solicitado'){
+    return `<div class="modal-sub-h">Siguiente acción · Backoffice</div>
+      <div class="act">
+        <div class="act-h">Confirmar la orden de compra</div>
+        <div class="act-row">
+          <div class="minput"><label>Folio OC</label><input id="m_folio" value="${sugFolio(p)}"></div>
+          <div class="minput"><label>Fecha promesa</label><input id="m_promesa" type="date" value="${defaultPromesa()}"></div>
         </div>
-        <div class="muted-note" style="margin-top:8px">Queda asentado en el portal; el WhatsApp es solo el aviso.</div></div>`;
-    }
-    return `<div class="muted-note" style="margin-bottom:14px">En este estado no hay acción de backoffice; el siguiente paso es de logística.</div>`;
+        <button class="btn btn-primary" onclick="confirmarOC('${p.id}')">Confirmar OC</button>
+      </div>`;
   }
-  // Logística
-  if(o.estado === 'Confirmado'){
-    return `<div class="actionbox"><h4>Despacho</h4><div class="row"><button class="btn btn-primary" onclick="marcarSalio('${o.id}')">Marcar que ya salió</button></div></div>`;
+  if(p.estado === 'Confirmado'){
+    return `<div class="modal-sub-h">Siguiente acción · Backoffice</div>
+      <div class="act">
+        <div class="act-h">Marcar la salida a obra</div>
+        <p class="act-note">La OC ${p.folio} está confirmada con promesa ${fechaCorta(p.promesa)}. Cuando el material vaya en camino, márcala como en tránsito.</p>
+        <button class="btn btn-primary" onclick="marcarSalida('${p.id}')">Marcar salida a obra</button>
+      </div>`;
   }
-  if(o.estado === 'En tránsito'){
-    const campos = o.lineas.map((l,i) => `<div class="fld"><label>${CATALOGO[l.id].nombre} (pidió ${l.casas})</label><input class="qy" id="ent_${i}" type="number" min="0" max="${l.casas}" value="${l.casas}"></div>`).join('');
-    return `<div class="actionbox"><h4>Registrar entrega</h4>
-      <div class="row">${campos}<div class="fld"><label>Fecha real</label><input id="rg_real" type="date" value="${hoyISO}"></div>
-      <button class="btn btn-go" onclick="registrarEntrega('${o.id}',false)">Registrar entrega</button></div>
-      <div class="muted-note" style="margin-top:8px">Si entregas menos de lo pedido, queda Parcial y el resto se surte como complemento.</div></div>`;
+  if(p.estado === 'En tránsito'){
+    return `<div class="modal-sub-h">Siguiente acción · Logística</div>
+      <div class="act logi"><div class="act-h">En manos de logística</div>
+      <p class="act-note">Logística registrará la entrega y su número de remisión desde su propio portal. Aquí solo das seguimiento.</p></div>`;
   }
-  if(o.estado === 'Parcial'){
-    const campos = o.lineas.map((l,i) => {
-      const rem = l.casas - l.entregadas;
-      return rem<=0 ? '' : `<div class="fld"><label>${CATALOGO[l.id].nombre} (faltan ${rem})</label><input class="qy" id="ent_${i}" type="number" min="0" max="${rem}" value="${rem}"></div>`;
-    }).join('');
-    return `<div class="actionbox"><h4>Registrar complemento · misma OC</h4>
-      <div class="row">${campos}<div class="fld"><label>Fecha real</label><input id="rg_real" type="date" value="${hoyISO}"></div>
-      <button class="btn btn-go" onclick="registrarEntrega('${o.id}',true)">Registrar complemento</button></div></div>`;
+  if(p.estado === 'Parcial'){
+    return `<div class="modal-sub-h">Siguiente acción · Logística</div>
+      <div class="act coral"><div class="act-h">Entrega parcial en proceso</div>
+      <p class="act-note">Logística completará lo faltante con otra remisión sobre esta misma OC. No consume saldo ni se refactura.</p></div>`;
   }
-  if(o.estado === 'Entregado' || o.estado === 'Conciliado'){
-    const campos = o.lineas.map((l,i) => `<div class="fld"><label>${CATALOGO[l.id].nombre}</label><input class="qy" id="rep_${i}" type="number" min="0" value="0"></div>`).join('');
-    return `<div class="actionbox"><h4>Reposición por daño · misma OC</h4>
-      <div class="row">${campos}<div class="fld"><label>Fecha real</label><input id="rep_real" type="date" value="${hoyISO}"></div>
-      <button class="btn btn-go" onclick="registrarReposicion('${o.id}')">Registrar reposición</button></div>
-      <div class="muted-note" style="margin-top:8px">Reemplazo de material defectuoso. No consume saldo ni se refactura; queda como evento de la orden.</div></div>`;
+  if(p.estado === 'Entregado'){
+    const ourBtn = p.conc.nosotros ? '' : `<button class="btn btn-primary" onclick="conciliarNuestro('${p.id}')">Confirmar de nuestro lado</button>`;
+    const aviso = p.conc.cliente ? '' : `<p class="act-note" style="margin-top:12px;margin-bottom:0">Falta que el contratista confirme desde su portal para cerrar la orden.</p>`;
+    return `<div class="modal-sub-h">Conciliación · doble confirmación</div>
+      <div class="act">
+        <div class="conc-row ${p.conc.cliente?'ok':''}"><span>Cliente (contratista)</span><b>${p.conc.cliente?'✓ confirmado':'pendiente'}</b></div>
+        <div class="conc-row ${p.conc.nosotros?'ok':''}"><span>Nosotros (PREPA)</span><b>${p.conc.nosotros?'✓ confirmado':'pendiente'}</b></div>
+        ${ourBtn}${aviso}
+      </div>`;
   }
-  return `<div class="muted-note" style="margin-bottom:14px">Sin acción de logística pendiente en este estado.</div>`;
+  return `<div class="modal-sub-h">Estado</div>
+    <div class="act done"><div class="act-h">Orden conciliada</div><p class="act-note">Cliente y PREPA confirmaron que coincide con la realidad. Orden cerrada.</p></div>`;
 }
 
-// Conciliación por doble confirmación. Toma fondo de acción cuando hay algo por hacer.
-function buildConcilia(o){
-  if(o.estado === 'Parcial') return `<div class="muted-note" style="margin-bottom:14px">La conciliación se abre cuando la entrega quede completa.</div>`;
-  if(o.estado !== 'Entregado' && o.estado !== 'Conciliado') return '';
-  const cChip = o.concilia.contratista ? `<span class="chip c-conciliado">confirmado</span>` : `<span class="chip c-solicitado">pendiente</span>`;
-  const bChip = o.concilia.backoffice  ? `<span class="chip c-conciliado">ok</span>`         : `<span class="chip c-solicitado">pendiente</span>`;
-  let ctrl = '';
-  if(o.estado !== 'Conciliado'){
-    if(!o.concilia.contratista) ctrl += `<button class="btn btn-ghost" onclick="simularContratista('${o.id}')">Simular confirmación del contratista (demo)</button>`;
-    if(rolActual==='backoffice' && o.concilia.contratista && !o.concilia.backoffice) ctrl += `<button class="btn btn-go" onclick="darOkBackoffice('${o.id}')">Dar OK de PREPA</button>`;
-    if(rolActual==='backoffice' && !o.concilia.contratista) ctrl += `<span class="muted-note">Falta que el contratista confirme en su portal.</span>`;
-  }
-  const cls = o.estado === 'Conciliado' ? 'concilia' : 'concilia concilia-action';
-  return `<div class="${cls}"><div class="cstat">Contratista: ${cChip}</div><div class="cstat">PREPA backoffice: ${bChip}</div>${ctrl}</div>`;
+function openModal(id){
+  const p = PEDIDOS.find(x => x.id === id); if(!p) return;
+  const c = contratoPorNum(p.contrato);
+  const folio = p.folio === '—' ? 'Por asignar' : p.folio;
+
+  const filas = p.lineas.map(l => {
+    const pend = l.losas - l.ent;
+    return `<tr><td class="l">${MODELOS[l.m].nombre}</td><td class="l">${TIPO[l.t]}</td><td>${l.losas}</td><td>${l.ent}</td><td>${pend}</td><td class="num">${mxn.format(precioLosa(l.m,l.t))}</td><td class="num">${mxn.format(l.losas*precioLosa(l.m,l.t))}</td></tr>`;
+  }).join('');
+  const sub = subtotalPedido(p);
+
+  const remis = p.remisiones.length
+    ? `<div class="meta"><span>Remisiones</span><b>${p.remisiones.map(r => r.num + (r.nota ? ' ('+r.nota+')' : '')).join(' · ')}</b></div>` : '';
+  const prom = p.promesa ? `<div class="meta"><span>Fecha promesa</span><b>${fechaLarga(p.promesa)}</b></div>` : '';
+
+  const bita = p.bitacora.map(b => `<div class="bita-item"><span class="bita-dot"></span><span class="when">${b.w}</span><div><span class="who2">${b.a}</span> — <span class="txt">${b.t}</span></div></div>`).join('');
+
+  $('modalCard').innerHTML = `
+    <div class="modal-h">
+      <div><div class="hl">${c.contratista} · orden de compra</div><h3>${folio}</h3>
+        <div class="msub">Contrato ${p.contrato} · Lote ${c.lote} · ${c.proyecto} · ${c.fracc}</div></div>
+      <div class="right"><span class="chip ${CHIP[p.estado]}">${p.estado}</span><button class="modal-close" onclick="closeModal()" aria-label="Cerrar">✕</button></div>
+    </div>
+    <div class="modal-body">
+      <div class="mdates">
+        <div class="meta"><span>Solicitud</span><b>${fechaLarga(p.fecha)}</b></div>
+        ${prom}${remis}
+      </div>
+      <table>
+        <thead><tr><th class="l">Modelo</th><th class="l">Elemento</th><th>Pedidas</th><th>Entregadas</th><th>Pendiente</th><th>P.U. losa</th><th>Subtotal</th></tr></thead>
+        <tbody>${filas}</tbody>
+      </table>
+      <div class="modal-tot">
+        <div class="tline"><span>Subtotal</span><span class="num">${mxn.format(sub)}</span></div>
+        <div class="tline"><span>IVA (16%)</span><span class="num">${mxn.format(sub*IVA)}</span></div>
+        <div class="tline grand"><span>Total</span><span class="num">${mxn.format(sub*(1+IVA))}</span></div>
+      </div>
+      ${accionZona(p)}
+      <div class="modal-sub-h">Historial</div>
+      <div class="bita">${bita}</div>
+    </div>`;
+  $('modalOv').classList.add('show');
+}
+function closeModal(){ $('modalOv').classList.remove('show'); }
+
+function refrescar(id){ renderBandeja(); renderMaestro(); if(id) openModal(id); }
+
+function confirmarOC(id){
+  const p = PEDIDOS.find(x => x.id === id); if(!p) return;
+  const folio = ($('m_folio').value || sugFolio(p)).trim();
+  const promesa = $('m_promesa').value || defaultPromesa();
+  p.folio = folio; p.promesa = promesa; p.estado = 'Confirmado';
+  p.bitacora.push({w:fechaCorta(hoyISO), a:'Backoffice', t:`Confirmado · folio ${folio} · promesa ${fechaCorta(promesa)}`});
+  refrescar(id);
+}
+function marcarSalida(id){
+  const p = PEDIDOS.find(x => x.id === id); if(!p) return;
+  p.estado = 'En tránsito';
+  p.bitacora.push({w:fechaCorta(hoyISO), a:'Backoffice', t:'Salida a obra registrada'});
+  refrescar(id);
+}
+function conciliarNuestro(id){
+  const p = PEDIDOS.find(x => x.id === id); if(!p) return;
+  p.conc.nosotros = true;
+  p.bitacora.push({w:fechaCorta(hoyISO), a:'Backoffice', t:'PREPA concilió: coincide con la realidad'});
+  if(p.conc.cliente && p.conc.nosotros){ p.estado = 'Conciliado'; p.bitacora.push({w:fechaCorta(hoyISO), a:'Sistema', t:'Doble confirmación completa · orden cerrada'}); }
+  refrescar(id);
 }
 
-/* ----- Acciones ----- */
-function seleccionar(id){ selReq = id; renderReq(); }
-
-function confirmarOrden(id){
-  const o = ordenPorId(id);
-  o.folio = ($('cf_folio').value || '').trim() || o.folio;
-  o.promesa = $('cf_promesa').value;
-  o.estado = 'Confirmado';
-  nota(o, 'Backoffice', `Confirmó. Folio ${o.folio}, promesa ${fechaCorta(o.promesa)}. Notificado por WhatsApp.`);
-  renderReq(); renderMaestro();
-}
-function marcarSalio(id){
-  const o = ordenPorId(id);
-  o.estado = 'En tránsito';
-  nota(o, 'Logística', 'Salió a obra.');
-  renderReq();
-}
-// Entrega y complemento crean un evento; la lista de eventos define el pendiente y el estado.
-function registrarEntrega(id, complemento){
-  const o = ordenPorId(id);
-  const real = $('rg_real').value || hoyISO;
-  const lineasEv = [];
-  o.lineas.forEach((l,i) => {
-    const inp = $('ent_'+i);
-    if(!inp) return;
-    let v = parseInt(inp.value, 10); if(isNaN(v) || v<0) v = 0;
-    const rem = l.casas - l.entregadas; if(v>rem) v = rem;
-    if(v>0) lineasEv.push({id:l.id, casas:v});
-  });
-  if(lineasEv.length){
-    (o.eventos = o.eventos || []).push({tipo: complemento?'complemento':'entrega', fecha:real, lineas:lineasEv});
-    aplicarEventos(o);
-  }
-  o.real = real;
-  const completo = o.lineas.every(l => l.entregadas >= l.casas);
-  o.estado = completo ? 'Entregado' : 'Parcial';
-  nota(o, 'Logística', `${completo?'Entrega completa':'Entrega parcial'}${complemento?' (complemento)':''} el ${fechaCorta(real)}.`);
-  renderReq(); renderMaestro();
-}
-// Reposición por daño: evento sobre la misma OC que NO mueve pendiente, saldo ni factura.
-function registrarReposicion(id){
-  const o = ordenPorId(id);
-  const real = ($('rep_real') && $('rep_real').value) || hoyISO;
-  const lineasEv = [];
-  o.lineas.forEach((l,i) => {
-    const inp = $('rep_'+i);
-    if(!inp) return;
-    let v = parseInt(inp.value, 10); if(isNaN(v) || v<0) v = 0;
-    if(v>0) lineasEv.push({id:l.id, casas:v});
-  });
-  if(!lineasEv.length) return;
-  (o.eventos = o.eventos || []).push({tipo:'reposicion', fecha:real, lineas:lineasEv});
-  const txt = lineasEv.map(e => e.casas + ' ' + CATALOGO[e.id].nombre).join(', ');
-  nota(o, 'Logística', `Reposición por daño: ${txt} el ${fechaCorta(real)}. No consume saldo ni se refactura.`);
-  renderReq();
-}
-function cerrarSiConcilia(o){
-  if(o.concilia.contratista && o.concilia.backoffice){
-    o.estado = 'Conciliado';
-    nota(o, 'Sistema', 'Conciliado (doble confirmación).');
-  }
-}
-function simularContratista(id){
-  const o = ordenPorId(id);
-  o.concilia.contratista = true;
-  nota(o, 'Contratista', '(demo) Confirmó en su portal que coincide con la realidad.');
-  cerrarSiConcilia(o);
-  renderReq();
-}
-function darOkBackoffice(id){
-  const o = ordenPorId(id);
-  o.concilia.backoffice = true;
-  nota(o, 'Backoffice', 'Dio OK de conciliación.');
-  cerrarSiConcilia(o);
-  renderReq();
-}
-function agregarNota(id){
-  const o = ordenPorId(id);
-  const inp = $('nota_in');
-  const txt = (inp.value || '').trim();
-  if(!txt) return;
-  nota(o, rolActual==='backoffice' ? 'Backoffice' : 'Logística', txt);
-  renderReq();
-}
-
-/* =========================================================
-   INIT
-   ========================================================= */
+/* ===================== INIT ===================== */
 function init(){
-  PEDIDOS.forEach(aplicarEventos);
-
   document.querySelectorAll('.nav button').forEach(b => b.addEventListener('click', () => navTo(b.dataset.sec)));
-  document.querySelectorAll('#roletoggle button').forEach(b => b.addEventListener('click', () => { rolActual = b.dataset.rol; renderReq(); }));
 
-  const selC = $('fContratista');
-  [...new Set(CONTRATOS.map(c => c.contratista))].forEach(n => selC.add(new Option(n, n)));
-  selC.addEventListener('change', e => { fCon = e.target.value; renderReq(); });
-  $('fEstadoReq').addEventListener('change', e => { fEst = e.target.value; renderReq(); });
-  $('fPeriodo').addEventListener('change', e => { fPer = e.target.value; renderReq(); });
+  $('ffilterM').addEventListener('click', e => { const b = e.target.closest('.fbtn'); if(!b) return; filtroFracc = b.dataset.f; renderMaestro(); });
+  $('ffilterR').addEventListener('click', e => { const b = e.target.closest('.fbtn'); if(!b) return; filtroFracc = b.dataset.f; renderBandeja(); });
 
-  selReq = PEDIDOS[0].id;
+  $('filtersR').addEventListener('click', e => {
+    const b = e.target.closest('.pill-f'); if(!b) return;
+    filtroEstado = b.dataset.e;
+    document.querySelectorAll('#filtersR .pill-f').forEach(x => x.classList.toggle('active', x === b));
+    renderBandeja();
+  });
+  const fc = $('fContratista');
+  fc.add(new Option('Todos los contratistas', 'todos'));
+  [...new Set(CONTRATOS.map(c => c.contratista))].forEach(n => fc.add(new Option(n, n)));
+  fc.addEventListener('change', e => { filtroContratista = e.target.value; renderBandeja(); });
+
+  $('modalOv').addEventListener('click', e => { if(e.target === $('modalOv')) closeModal(); });
+  document.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal(); });
+
   navTo('maestro');
 }
 window.addEventListener('DOMContentLoaded', init);
