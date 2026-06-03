@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PREPA · Logística</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Manrope:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --blue-900:#0a335f; --blue-800:#0b3e72; --blue-700:#0e4d8b; --blue-600:#1565a8;
+    --blue-100:#dcebf8; --blue-50:#f1f7fc;
+    --ink:#14202c; --muted:#5d6e7d; --faint:#8a99a6; --line:#dde5ec;
+    --bg:#e9eef3; --card:#ffffff; --action:#eef5fc;
+    --amber:#d18a23; --teal:#12907e; --green:#2f8a3e; --disp:#cdd9e4; --coral:#c0623a;
+    --ok:#137a4d; --ok-bg:#e4f2ea; --warn:#a85a12; --warn-bg:#fbeede; --coral-bg:#f7e7e0;
+    --radius:14px; --radius-sm:9px;
+    --shadow:0 1px 2px rgba(13,42,71,.05), 0 8px 24px rgba(13,42,71,.06);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{font-family:'Manrope',sans-serif; color:var(--ink); background:var(--bg); -webkit-font-smoothing:antialiased; line-height:1.5}
+  .num{font-family:'IBM Plex Mono',monospace}
+
+  .topnav{display:flex; align-items:center; gap:18px; background:linear-gradient(180deg,var(--blue-700),var(--blue-900)); color:#fff; padding:12px 24px; flex-wrap:wrap}
+  .topnav .brand{display:flex; align-items:center; gap:11px}
+  .topnav .mark{width:40px; height:40px; border-radius:10px; background:#fff; flex:none; display:flex; align-items:center; justify-content:center; font-family:'Bricolage Grotesque',sans-serif; font-weight:800; color:var(--blue-700); font-size:18px}
+  .topnav .brand h1{font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:16px; margin:0; line-height:1.15}
+  .topnav .brand p{margin:1px 0 0; font-size:11px; color:var(--blue-100)}
+  .tag{display:flex; align-items:center; gap:9px; font-size:14px; font-weight:600; color:#fff; background:rgba(255,255,255,.12); border-radius:var(--radius-sm); padding:9px 15px}
+  .tag svg{width:18px; height:18px}
+  .who{margin-left:auto; text-align:right}
+  .who b{display:block; font-family:'Bricolage Grotesque',sans-serif; font-size:15px}
+  .who span{font-size:11px; color:var(--blue-100); text-transform:uppercase; letter-spacing:.5px}
+
+  .main{max-width:1120px; margin:0 auto; padding:24px 26px 60px}
+  .mainhead{display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin-bottom:18px}
+  .mainhead h2{font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:24px; color:var(--blue-900); margin:0}
+  .mainhead .crumb{font-size:13px; color:var(--muted)}
+
+  .ffilter{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:18px}
+  .filterbar{display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:10px}
+  .filterbar.gap{margin-bottom:18px}
+  .filterbar .ffilter{margin-bottom:0}
+  .flabel{font-size:10.5px; text-transform:uppercase; letter-spacing:.6px; color:var(--faint); font-weight:700; min-width:104px}
+  .fbtn{font-family:'Manrope'; font-size:13.5px; font-weight:600; cursor:pointer; border:1px solid var(--line); background:#fff; color:var(--muted); border-radius:22px; padding:8px 16px}
+  .fbtn:hover{background:var(--blue-50)}
+  .fbtn.active{background:var(--blue-700); color:#fff; border-color:var(--blue-700)}
+
+  .kpis{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin-bottom:8px}
+  .kpi{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:14px 16px; box-shadow:var(--shadow)}
+  .kpi.flag{border-color:#f0d8b6; background:#fffaf2}
+  .kpi .k{font-size:10.5px; text-transform:uppercase; letter-spacing:.5px; color:var(--faint); font-weight:700}
+  .kpi .v{font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:25px; color:var(--blue-900); margin-top:4px; line-height:1.1}
+  .kpi.flag .v{color:var(--warn)}
+  .kpi .s{font-size:11px; color:var(--muted); margin-top:2px}
+
+  .sectitle{font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:15px; color:var(--blue-900); margin:22px 2px 10px}
+  .filters{display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:0 2px 14px}
+  .pill-f{font-family:'Manrope'; font-size:12.5px; font-weight:600; cursor:pointer; border:1px solid var(--line); background:#fff; color:var(--muted); border-radius:20px; padding:6px 13px}
+  .pill-f.active{background:var(--blue-700); color:#fff; border-color:var(--blue-700)}
+  .filters select{font-family:'Manrope'; font-size:12.5px; font-weight:600; border:1px solid var(--line); border-radius:7px; padding:6px 10px; background:#fff; color:var(--ink)}
+  .filters .sp{margin-left:auto}
+  .rightgrp{margin-left:auto; display:flex; gap:10px; align-items:center; flex-wrap:wrap}
+  .dlab{font-size:11.5px; font-weight:600; color:var(--muted); display:flex; align-items:center; gap:6px}
+  .dlab input[type=date]{font-family:'Manrope'; font-size:12.5px; font-weight:600; border:1px solid var(--line); border-radius:7px; padding:5px 8px; background:#fff; color:var(--ink)}
+  .dlab input[type=date]:focus{outline:none; border-color:var(--blue-600); box-shadow:0 0 0 3px var(--blue-100)}
+  .dclear{font-family:'Manrope'; font-size:12px; font-weight:700; cursor:pointer; border:1px solid var(--line); background:#fff; color:var(--faint); border-radius:7px; width:28px; height:28px; line-height:1}
+  .dclear:hover{background:#f4f7fa; color:var(--ink)}
+
+  .tablecard{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden}
+  table.data{width:100%; border-collapse:collapse}
+  table.data thead th{font-size:10.5px; text-transform:uppercase; letter-spacing:.5px; color:var(--muted); font-weight:700; text-align:right; padding:11px 14px; background:#f6f9fc; border-bottom:1px solid var(--line)}
+  table.data thead th.l{text-align:left}
+  table.data tbody td{padding:11px 14px; border-bottom:1px solid var(--line); font-size:13.5px; text-align:right; vertical-align:middle}
+  table.data tbody td.l{text-align:left}
+  table.data tbody tr:last-child td{border-bottom:0}
+  #bandejaBody tr{cursor:pointer; transition:background .12s}
+  #bandejaBody tr:hover{background:var(--blue-50)}
+  #bandejaBody tr.ro{cursor:default}
+  #bandejaBody tr.ro:hover{background:transparent}
+  .folio{font-family:'IBM Plex Mono',monospace; font-weight:600; color:var(--blue-800)}
+  .chip{display:inline-block; font-size:11.5px; font-weight:700; padding:3px 10px; border-radius:20px; white-space:nowrap}
+  .c-solicitado{background:#eef1f4; color:#56646f} .c-confirmado{background:var(--blue-50); color:var(--blue-700)}
+  .c-transito{background:#fbefda; color:#9a6516} .c-entregado{background:#e1f1ee; color:#0e7163}
+  .c-conciliado{background:#e7f3e8; color:#2c7a39} .c-parcial{background:#f7e7e0; color:#a8501f}
+  .needs{display:inline-block; width:8px; height:8px; border-radius:50%; background:var(--warn); margin-right:7px; vertical-align:middle}
+  .editbadge{font-size:11px; font-weight:700; color:var(--warn); margin-left:8px}
+  .empty{padding:24px 16px; text-align:center; color:var(--faint); font-size:13px}
+
+  /* Modal */
+  .modal-ov{position:fixed; inset:0; background:rgba(10,30,55,.5); display:none; align-items:flex-start; justify-content:center; padding:42px 16px; z-index:60; overflow:auto}
+  .modal-ov.show{display:flex; animation:fade .2s ease}
+  .modal{background:#fff; border-radius:16px; max-width:780px; width:100%; box-shadow:0 24px 70px rgba(8,28,50,.4); animation:pop .26s ease}
+  .modal-h{display:flex; justify-content:space-between; align-items:flex-start; gap:14px; padding:22px 26px 18px; border-bottom:1px solid var(--line)}
+  .modal-h .hl{font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--amber); font-weight:700}
+  .modal-h h3{font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:24px; color:var(--blue-900); margin:3px 0 4px}
+  .modal-h .msub{font-size:13px; color:var(--muted)}
+  .modal-h .right{display:flex; align-items:center; gap:12px; flex:none}
+  .modal-close{width:32px; height:32px; border-radius:9px; border:1px solid var(--line); background:#fff; color:var(--muted); font-size:16px; cursor:pointer; line-height:1}
+  .modal-close:hover{background:#f4f7fa; color:var(--ink)}
+  .modal-body{padding:20px 26px 24px}
+  .mdates{display:flex; flex-wrap:wrap; gap:26px; margin-bottom:16px}
+  .mdates .meta span{display:block; font-size:11px; text-transform:uppercase; letter-spacing:.5px; color:var(--faint); font-weight:600; margin-bottom:2px}
+  .mdates .meta b{font-size:14px; font-weight:600; color:var(--ink)}
+  .modal-body table.lines{width:100%; border-collapse:collapse}
+  .modal-body table.lines thead th{font-size:10.5px; text-transform:uppercase; letter-spacing:.4px; color:var(--muted); font-weight:700; text-align:right; padding:9px 12px; background:#f6f9fc; border-bottom:1px solid var(--line)}
+  .modal-body table.lines thead th.l{text-align:left}
+  .modal-body table.lines tbody td{padding:9px 12px; border-bottom:1px solid var(--line); font-size:13.5px; text-align:right}
+  .modal-body table.lines tbody td.l{text-align:left; font-weight:600; color:var(--blue-900)}
+
+  .modal-sub-h{font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:13px; color:var(--blue-900); text-transform:uppercase; letter-spacing:.6px; margin:22px 0 10px}
+  .act{background:var(--action); border:1px solid var(--blue-100); border-radius:var(--radius); padding:16px 18px}
+  .act.ro{background:#f3f5f7; border-color:var(--line)}
+  .act.done{background:var(--ok-bg); border-color:#bfe0cd}
+  .act-h{font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:14px; color:var(--blue-900); margin-bottom:10px}
+  .act.ro .act-h{color:var(--muted)} .act.done .act-h{color:#0c4f33}
+  .act-note{font-size:13px; color:var(--muted); margin:0}
+  .act-row{display:flex; gap:14px; flex-wrap:wrap; margin-bottom:12px}
+  .minput{flex:1; min-width:170px}
+  .minput label{display:block; font-size:11px; text-transform:uppercase; letter-spacing:.5px; color:var(--faint); font-weight:600; margin-bottom:4px}
+  .minput input{width:100%; font-family:'Manrope'; font-size:14px; font-weight:600; color:var(--ink); border:1px solid var(--line); border-radius:var(--radius-sm); padding:8px 11px; background:#fff}
+  .minput input:focus{outline:none; border-color:var(--blue-600); box-shadow:0 0 0 3px var(--blue-100)}
+  table.entrega{width:100%; border-collapse:collapse; margin-bottom:12px; background:#fff; border:1px solid var(--line); border-radius:var(--radius-sm); overflow:hidden}
+  table.entrega th{font-size:10px; text-transform:uppercase; letter-spacing:.4px; color:var(--muted); font-weight:700; text-align:right; padding:8px 12px; background:#f6f9fc; border-bottom:1px solid var(--line)}
+  table.entrega th.l{text-align:left}
+  table.entrega td{padding:8px 12px; border-bottom:1px solid var(--line); font-size:13.5px; text-align:right}
+  table.entrega td.l{text-align:left; font-weight:600; color:var(--blue-900)}
+  table.entrega tr:last-child td{border-bottom:0}
+  .qlosa{width:64px; text-align:center; font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:14px; border:1px solid var(--line); border-radius:7px; padding:6px 4px; background:#fbfcfe; color:var(--ink)}
+  .qlosa:focus{outline:none; border-color:var(--blue-600); box-shadow:0 0 0 3px var(--blue-100)}
+  button.btn{font-family:'Manrope'; font-weight:700; font-size:14px; cursor:pointer; border-radius:var(--radius-sm); padding:11px 20px; border:1px solid transparent}
+  .btn-primary{background:var(--blue-700); color:#fff; box-shadow:0 6px 16px rgba(14,77,139,.25)} .btn-primary:hover{background:var(--blue-600)}
+
+  .bita{display:flex; flex-direction:column}
+  .bita-item{display:flex; gap:12px; padding:10px 0; border-bottom:1px dashed var(--line); font-size:13px}
+  .bita-item:last-child{border-bottom:0}
+  .bita-dot{width:9px; height:9px; border-radius:50%; background:var(--blue-600); margin-top:5px; flex:none}
+  .bita-item .when{font-family:'IBM Plex Mono',monospace; font-size:11.5px; color:var(--faint); min-width:54px}
+  .bita-item .who2{font-weight:700; color:var(--blue-900)}
+  .bita-item .txt{color:var(--muted)}
+
+  @keyframes fade{from{opacity:0}to{opacity:1}}
+  @keyframes pop{from{opacity:0; transform:translateY(-10px) scale(.99)}to{opacity:1; transform:none}}
+  @keyframes rise{from{opacity:0; transform:translateY(-6px)}to{opacity:1; transform:none}}
+  @media(max-width:760px){.topnav{gap:10px; padding:12px 14px} .who{margin-left:0; order:2} .main{padding:18px 14px 50px} .kpis{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+
+  <header class="topnav">
+    <div class="brand"><div class="mark">P</div><div><h1>Prefabricados de Pachuca</h1><p>Portal de logística</p></div></div>
+    <div class="tag"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h13v9H3zM16 9h3l2 3v3h-5z"/><circle cx="7" cy="18" r="1.6"/><circle cx="17" cy="18" r="1.6"/></svg>Entregas</div>
+    <div class="who"><b>Logística</b><span>PREPA</span></div>
+  </header>
+
+  <main class="main">
+    <div class="mainhead"><h2>Entregas</h2><div class="crumb">Solo se editan las órdenes en tránsito o parciales</div></div>
+    <div class="filterbar"><span class="flabel">Proyecto</span><div class="ffilter" id="ffilterProy"></div></div>
+    <div class="filterbar gap"><span class="flabel">Fraccionamiento</span><div class="ffilter" id="ffilter"></div></div>
+    <div class="kpis" id="kpis"></div>
+    <div class="sectitle">Requisiciones — clic para abrir</div>
+    <div class="filters" id="filters">
+      <button class="pill-f active" data-e="todos">Todos los estados</button>
+      <button class="pill-f" data-e="En tránsito">En tránsito</button>
+      <button class="pill-f" data-e="Parcial">Parcial</button>
+      <button class="pill-f" data-e="Entregado">Entregado</button>
+      <button class="pill-f" data-e="Conciliado">Conciliado</button>
+      <div class="rightgrp">
+        <select id="fContratista"></select>
+        <label class="dlab">Desde <input type="date" id="fDesde"></label>
+        <label class="dlab">Hasta <input type="date" id="fHasta"></label>
+        <button class="dclear" id="fClear" title="Limpiar fechas">✕</button>
+      </div>
+    </div>
+    <div class="tablecard"><table class="data"><thead><tr><th class="l">Folio OC</th><th class="l">Solicitud</th><th class="l">Contratista</th><th class="l">Contrato · lote</th><th class="l">Losas</th><th>Avance</th><th class="l">Estado</th></tr></thead><tbody id="bandejaBody"></tbody></table></div>
+  </main>
+
+  <div class="modal-ov" id="modalOv"><div class="modal" id="modalCard"></div></div>
+
+<script>
+"use strict";
+
+/* ===================== DATOS ===================== */
+const IVA = 0.16;
+
+const MODELOS = {
+  palma:    {nombre:'Palma',     ent:1, az:1, pEnt:11770.43, pAz:12135.73},
+  palermo:  {nombre:'Palermo',   ent:1, az:1, pEnt:10676.84, pAz:13246.44},
+  cartagena:{nombre:'Cartagena', ent:2, az:1, pEnt:14613.30, pAz:16211.05},
+  jerez:    {nombre:'Jerez',     ent:1, az:1, pEnt:8921.92,  pAz:10042.65},
+  sevilla:  {nombre:'Sevilla',   ent:2, az:1, pEnt:13200.00, pAz:14800.00},
+  verona:   {nombre:'Verona',    ent:2, az:1, pEnt:16500.00, pAz:18400.00},
+};
+
+const CONTRATOS = [
+  {num:'23', contratista:'ICMEC',  proyecto:'Andalucía Residencial', fracc:'Santa Elena', lote:'48'},
+  {num:'24', contratista:'ICMEC',  proyecto:'Andalucía Residencial', fracc:'Los Álamos',  lote:'52'},
+  {num:'25', contratista:'ICMEC',  proyecto:'Puerta del Sol',        fracc:'Roble',       lote:'60'},
+  {num:'28', contratista:'Amjova', proyecto:'Puerta del Sol',        fracc:'Roble',       lote:'47'},
+  {num:'30', contratista:'Alameda',proyecto:'Puerta del Sol',        fracc:'Roble',       lote:'47'},
+  {num:'27', contratista:'Fasar',  proyecto:'Puerta del Sol',        fracc:'Roble',       lote:'47'},
+  {num:'18', contratista:'Alameda',proyecto:'Andalucía Residencial', fracc:'Santa Elena', lote:'48'},
+  {num:'17', contratista:'Uligab', proyecto:'Andalucía Residencial', fracc:'Los Álamos',  lote:'51'},
+  {num:'11', contratista:'Power Pachuca', proyecto:'Andalucía Residencial', fracc:'Santa Elena', lote:'10'},
+];
+
+const PEDIDOS = [
+  {id:'r1', folio:'—', contrato:'23', fecha:'2026-05-28', promesa:'', estado:'Solicitado',
+   lineas:[{m:'palermo',t:'ent',losas:2,ent:0},{m:'cartagena',t:'ent',losas:1,ent:0}], remisiones:[], conc:{cliente:false,nosotros:false},
+   bitacora:[{w:'28 may',a:'ICMEC',t:'Requerimiento enviado a PREPA'}]},
+
+  {id:'r2', folio:'IC-15', contrato:'23', fecha:'2026-05-20', promesa:'2026-06-04', estado:'Confirmado',
+   lineas:[{m:'palma',t:'ent',losas:1,ent:0},{m:'jerez',t:'ent',losas:1,ent:0}], remisiones:[], conc:{cliente:false,nosotros:false},
+   bitacora:[{w:'20 may',a:'ICMEC',t:'Requerimiento enviado'},{w:'21 may',a:'Backoffice',t:'Confirmado · folio IC-15 · promesa 04 jun'}]},
+
+  {id:'r3', folio:'IC-12', contrato:'24', fecha:'2026-05-16', promesa:'2026-05-30', estado:'En tránsito',
+   lineas:[{m:'jerez',t:'ent',losas:2,ent:0}], remisiones:[], conc:{cliente:false,nosotros:false},
+   bitacora:[{w:'16 may',a:'ICMEC',t:'Requerimiento enviado'},{w:'17 may',a:'Backoffice',t:'Confirmado · folio IC-12 · promesa 30 may'},{w:'29 may',a:'Backoffice',t:'Salida a obra registrada'}]},
+
+  {id:'r4', folio:'AM-09', contrato:'28', fecha:'2026-05-12', promesa:'2026-05-19', estado:'Parcial',
+   lineas:[{m:'palermo',t:'ent',losas:3,ent:2},{m:'jerez',t:'ent',losas:2,ent:2}], remisiones:[{num:'R-5521',fecha:'2026-05-19',nota:'Faltó 1 losa de entrepiso Palermo'}], conc:{cliente:false,nosotros:false},
+   bitacora:[{w:'12 may',a:'Amjova',t:'Requerimiento enviado'},{w:'13 may',a:'Backoffice',t:'Confirmado · folio AM-09 · promesa 19 may'},{w:'18 may',a:'Backoffice',t:'Salida a obra registrada'},{w:'19 may',a:'Logística',t:'Entrega parcial · remisión R-5521 · faltó 1 entrepiso Palermo'}]},
+
+  {id:'r5', folio:'IC-07', contrato:'23', fecha:'2026-05-08', promesa:'2026-05-12', estado:'Entregado',
+   lineas:[{m:'jerez',t:'az',losas:1,ent:1}], remisiones:[{num:'R-5500',fecha:'2026-05-12',nota:''}], conc:{cliente:true,nosotros:false},
+   bitacora:[{w:'08 may',a:'ICMEC',t:'Requerimiento enviado'},{w:'09 may',a:'Backoffice',t:'Confirmado · folio IC-07 · promesa 12 may'},{w:'11 may',a:'Backoffice',t:'Salida a obra registrada'},{w:'12 may',a:'Logística',t:'Entrega completa · remisión R-5500'},{w:'13 may',a:'ICMEC',t:'Cliente concilió'}]},
+
+  {id:'r6', folio:'FA-03', contrato:'27', fecha:'2026-05-05', promesa:'2026-05-09', estado:'Conciliado',
+   lineas:[{m:'jerez',t:'ent',losas:3,ent:3}], remisiones:[{num:'R-5470',fecha:'2026-05-09',nota:''}], conc:{cliente:true,nosotros:true},
+   bitacora:[{w:'05 may',a:'Fasar',t:'Requerimiento enviado'},{w:'06 may',a:'Backoffice',t:'Confirmado · folio FA-03'},{w:'08 may',a:'Backoffice',t:'Salida a obra registrada'},{w:'09 may',a:'Logística',t:'Entrega completa · remisión R-5470'},{w:'10 may',a:'Fasar',t:'Cliente concilió'},{w:'10 may',a:'Backoffice',t:'PREPA concilió · orden cerrada'}]},
+
+  {id:'r7', folio:'—', contrato:'30', fecha:'2026-05-29', promesa:'', estado:'Solicitado',
+   lineas:[{m:'palma',t:'ent',losas:2,ent:0}], remisiones:[], conc:{cliente:false,nosotros:false},
+   bitacora:[{w:'29 may',a:'Alameda',t:'Requerimiento enviado a PREPA'}]},
+];
+
+const CHIP = {Solicitado:'c-solicitado',Confirmado:'c-confirmado','En tránsito':'c-transito',Parcial:'c-parcial',Entregado:'c-entregado',Conciliado:'c-conciliado'};
+const TIPO = {ent:'Entrepiso', az:'Azotea'};
+const editable = estado => estado === 'En tránsito' || estado === 'Parcial';
+
+/* ===================== HELPERS ===================== */
+const $ = id => document.getElementById(id);
+const mxn  = new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN'});
+const hoyISO = new Date().toISOString().slice(0,10);
+const fechaCorta = d => (!d || d==='—' || d==='') ? '—' : new Intl.DateTimeFormat('es-MX',{day:'2-digit',month:'short'}).format(new Date(d+'T00:00:00'));
+const fechaLarga = d => new Intl.DateTimeFormat('es-MX',{day:'2-digit',month:'long',year:'numeric'}).format(new Date(d+'T00:00:00'));
+
+const contratoPorNum = num => CONTRATOS.find(c => c.num === num);
+const precioLosa = (modelo, tipo) => tipo==='ent' ? MODELOS[modelo].pEnt : MODELOS[modelo].pAz;
+const totalPedido = p => p.lineas.reduce((s,l)=>s + l.losas*precioLosa(l.m,l.t), 0) * (1+IVA);
+const losasPedido = p => p.lineas.reduce((s,l)=>s+l.losas, 0);
+const entregadasPedido = p => p.lineas.reduce((s,l)=>s+l.ent, 0);
+const losaTxt = l => `${l.losas} ${TIPO[l.t].toLowerCase()} ${MODELOS[l.m].nombre}`;
+
+const fraccionamientos = () => [...new Set(CONTRATOS.map(c => c.fracc))];
+const proyectos = () => [...new Set(CONTRATOS.map(c => c.proyecto))];
+const fraccDeProyecto = () => [...new Set(CONTRATOS.filter(c => filtroProyecto==='todos' || c.proyecto===filtroProyecto).map(c => c.fracc))];
+const enAmbito = c => (filtroProyecto==='todos' || c.proyecto===filtroProyecto) && (filtroFracc==='todos' || c.fracc===filtroFracc);
+const enRango = p => (!filtroDesde || p.fecha >= filtroDesde) && (!filtroHasta || p.fecha <= filtroHasta);
+
+/* ===================== FILTROS ===================== */
+let filtroProyecto = 'todos';
+let filtroFracc = 'todos';
+let filtroEstado = 'todos';
+let filtroContratista = 'todos';
+let filtroDesde = '';
+let filtroHasta = '';
+
+function renderFiltroProy(){
+  const opts = ['todos', ...proyectos()];
+  $('ffilterProy').innerHTML = opts.map(f => `<button class="fbtn ${f===filtroProyecto?'active':''}" data-f="${f}">${f==='todos'?'Todos':f}</button>`).join('');
+}
+function renderFiltro(){
+  const opts = ['todos', ...fraccDeProyecto()];
+  $('ffilter').innerHTML = opts.map(f => `<button class="fbtn ${f===filtroFracc?'active':''}" data-f="${f}">${f==='todos'?'Todos':f}</button>`).join('');
+}
+
+/* ===================== RENDER ===================== */
+function render(){
+  renderFiltroProy();
+  renderFiltro();
+  const visibles = PEDIDOS.filter(p => enAmbito(contratoPorNum(p.contrato)));
+
+  const porEntregar = visibles.filter(p => p.estado==='En tránsito').length;
+  const parciales   = visibles.filter(p => p.estado==='Parcial').length;
+  const entregadas  = visibles.filter(p => p.estado==='Entregado').length;
+  const losasEnt    = visibles.reduce((s,p)=>s+entregadasPedido(p), 0);
+  $('kpis').innerHTML = [
+    {k:'Por entregar', v:porEntregar, s:'en tránsito', flag:porEntregar>0},
+    {k:'Por completar', v:parciales, s:'parciales', flag:parciales>0},
+    {k:'Entregadas', v:entregadas, s:'en conciliación'},
+    {k:'Losas entregadas', v:losasEnt},
+  ].map(x => `<div class="kpi ${x.flag?'flag':''}"><div class="k">${x.k}</div><div class="v">${x.v}</div><div class="s">${x.s}</div></div>`).join('');
+
+  const filas = visibles.filter(p =>
+    (filtroEstado === 'todos'      || p.estado === filtroEstado) &&
+    (filtroContratista === 'todos' || contratoPorNum(p.contrato).contratista === filtroContratista) &&
+    enRango(p)
+  );
+  $('bandejaBody').innerHTML = filas.length ? filas.map(p => {
+    const c = contratoPorNum(p.contrato);
+    const folio = p.folio === '—' ? '<span style="color:var(--faint)">por asignar</span>' : `<span class="folio">${p.folio}</span>`;
+    const ed = editable(p.estado);
+    return `<tr class="${ed?'':'ro'}" onclick="openModal('${p.id}')">
+      <td class="l">${ed?'<span class="needs" title="Editable"></span>':''}${folio}</td>
+      <td class="l">${fechaCorta(p.fecha)}</td>
+      <td class="l">${c.contratista}</td>
+      <td class="l">C${p.contrato} · L${c.lote}</td>
+      <td class="l">${p.lineas.map(losaTxt).join(', ')}</td>
+      <td class="num">${entregadasPedido(p)} / ${losasPedido(p)}</td>
+      <td class="l"><span class="chip ${CHIP[p.estado]}">${p.estado}</span>${ed?'<span class="editbadge">editable</span>':''}</td>
+    </tr>`;
+  }).join('') : `<tr><td colspan="7" class="empty">Sin requisiciones para este filtro</td></tr>`;
+}
+
+/* ===================== MODAL + ACCIONES ===================== */
+function sugRemision(){
+  let max = 0;
+  PEDIDOS.forEach(p => p.remisiones.forEach(r => { const n = parseInt(String(r.num).replace(/\D/g,''),10); if(!isNaN(n) && n>max) max = n; }));
+  return 'R-' + (max+1);
+}
+
+function accionZona(p){
+  if(p.estado === 'En tránsito' || p.estado === 'Parcial'){
+    const esComplemento = p.estado === 'Parcial';
+    const titulo = esComplemento ? 'Registrar complemento' : 'Registrar entrega';
+    const filas = p.lineas.map(l => {
+      const pend = l.losas - l.ent;
+      const dis = pend === 0 ? 'disabled' : '';
+      return `<tr>
+        <td class="l">${MODELOS[l.m].nombre}</td>
+        <td class="l">${TIPO[l.t]}</td>
+        <td>${pend}</td>
+        <td><input class="qlosa" id="e_${l.m}_${l.t}" type="number" min="0" max="${pend}" step="1" value="${pend}" ${dis}></td>
+      </tr>`;
+    }).join('');
+    return `<div class="modal-sub-h">Siguiente acción · Logística</div>
+      <div class="act">
+        <div class="act-h">${titulo}</div>
+        <div class="act-row">
+          <div class="minput"><label>Número de remisión</label><input id="m_remi" value="${sugRemision()}"></div>
+          <div class="minput"><label>Fecha de entrega</label><input id="m_fecha" type="date" value="${hoyISO}"></div>
+        </div>
+        <table class="entrega"><thead><tr><th class="l">Modelo</th><th class="l">Elemento</th><th>Pendiente</th><th>Entregar ahora</th></tr></thead><tbody>${filas}</tbody></table>
+        <div class="minput" style="margin-bottom:12px"><label>Nota (si llega incompleta)</label><input id="m_nota" placeholder="Opcional"></div>
+        <button class="btn btn-primary" onclick="registrarEntrega('${p.id}')">${titulo}</button>
+      </div>`;
+  }
+  if(p.estado === 'Solicitado'){
+    return `<div class="modal-sub-h">Estado</div><div class="act ro"><div class="act-h">Aún no sale a obra</div><p class="act-note">Esperando que backoffice confirme la OC y marque la salida. Logística no la edita todavía.</p></div>`;
+  }
+  if(p.estado === 'Confirmado'){
+    return `<div class="modal-sub-h">Estado</div><div class="act ro"><div class="act-h">Confirmada, sin salida</div><p class="act-note">La OC ${p.folio} ya tiene folio y fecha promesa. Backoffice marcará la salida; ahí podrás registrar la entrega.</p></div>`;
+  }
+  if(p.estado === 'Entregado'){
+    return `<div class="modal-sub-h">Estado</div><div class="act done"><div class="act-h">Entregada</div><p class="act-note">Entrega registrada. En conciliación entre el cliente y PREPA.</p></div>`;
+  }
+  return `<div class="modal-sub-h">Estado</div><div class="act done"><div class="act-h">Conciliada</div><p class="act-note">Cliente y PREPA confirmaron. Orden cerrada.</p></div>`;
+}
+
+function openModal(id){
+  const p = PEDIDOS.find(x => x.id === id); if(!p) return;
+  const c = contratoPorNum(p.contrato);
+  const folio = p.folio === '—' ? 'Por asignar' : p.folio;
+
+  const filas = p.lineas.map(l => {
+    const pend = l.losas - l.ent;
+    return `<tr><td class="l">${MODELOS[l.m].nombre}</td><td class="l">${TIPO[l.t]}</td><td>${l.losas}</td><td>${l.ent}</td><td>${pend}</td></tr>`;
+  }).join('');
+
+  const remis = p.remisiones.length
+    ? `<div class="meta"><span>Remisiones</span><b>${p.remisiones.map(r => r.num + (r.nota ? ' ('+r.nota+')' : '')).join(' · ')}</b></div>` : '';
+  const prom = p.promesa ? `<div class="meta"><span>Fecha promesa</span><b>${fechaLarga(p.promesa)}</b></div>` : '';
+  const bita = p.bitacora.map(b => `<div class="bita-item"><span class="bita-dot"></span><span class="when">${b.w}</span><div><span class="who2">${b.a}</span> — <span class="txt">${b.t}</span></div></div>`).join('');
+
+  $('modalCard').innerHTML = `
+    <div class="modal-h">
+      <div><div class="hl">${c.contratista} · orden de compra</div><h3>${folio}</h3>
+        <div class="msub">Contrato ${p.contrato} · Lote ${c.lote} · ${c.proyecto} · ${c.fracc}</div></div>
+      <div class="right"><span class="chip ${CHIP[p.estado]}">${p.estado}</span><button class="modal-close" onclick="closeModal()" aria-label="Cerrar">✕</button></div>
+    </div>
+    <div class="modal-body">
+      <div class="mdates">
+        <div class="meta"><span>Solicitud</span><b>${fechaLarga(p.fecha)}</b></div>
+        ${prom}${remis}
+      </div>
+      <table class="lines">
+        <thead><tr><th class="l">Modelo</th><th class="l">Elemento</th><th>Pedidas</th><th>Entregadas</th><th>Pendiente</th></tr></thead>
+        <tbody>${filas}</tbody>
+      </table>
+      ${accionZona(p)}
+      <div class="modal-sub-h">Historial</div>
+      <div class="bita">${bita}</div>
+    </div>`;
+  $('modalOv').classList.add('show');
+}
+function closeModal(){ $('modalOv').classList.remove('show'); }
+
+function registrarEntrega(id){
+  const p = PEDIDOS.find(x => x.id === id); if(!p) return;
+  const remi = ($('m_remi').value || sugRemision()).trim();
+  const fecha = $('m_fecha').value || hoyISO;
+  const nota = ($('m_nota').value || '').trim();
+
+  let entregadoAhora = 0;
+  p.lineas.forEach(l => {
+    const pend = l.losas - l.ent;
+    const inp = $('e_'+l.m+'_'+l.t);
+    let q = inp ? parseInt(inp.value,10) : 0;
+    if(isNaN(q) || q < 0) q = 0;
+    if(q > pend) q = pend;
+    l.ent += q; entregadoAhora += q;
+  });
+  if(entregadoAhora === 0) return; // nada que registrar
+
+  const pendienteTotal = p.lineas.reduce((s,l)=>s + (l.losas - l.ent), 0);
+  const completa = pendienteTotal === 0;
+  const esComplemento = p.estado === 'Parcial';
+  p.estado = completa ? 'Entregado' : 'Parcial';
+  p.remisiones.push({num:remi, fecha, nota});
+
+  const verbo = esComplemento ? 'Complemento' : 'Entrega';
+  const tipo = completa ? 'completa' : 'parcial';
+  const notaTxt = (!completa && nota) ? ` · ${nota}` : '';
+  p.bitacora.push({w:fechaCorta(hoyISO), a:'Logística', t:`${verbo} ${tipo} · remisión ${remi}${notaTxt}`});
+
+  render();
+  openModal(id);
+}
+
+/* ===================== INIT ===================== */
+function init(){
+  $('ffilterProy').addEventListener('click', e => {
+    const b = e.target.closest('.fbtn'); if(!b) return;
+    filtroProyecto = b.dataset.f; filtroFracc = 'todos'; render();
+  });
+  $('ffilter').addEventListener('click', e => { const b = e.target.closest('.fbtn'); if(!b) return; filtroFracc = b.dataset.f; render(); });
+  $('filters').addEventListener('click', e => {
+    const b = e.target.closest('.pill-f'); if(!b) return;
+    filtroEstado = b.dataset.e;
+    document.querySelectorAll('#filters .pill-f').forEach(x => x.classList.toggle('active', x === b));
+    render();
+  });
+  const fc = $('fContratista');
+  fc.add(new Option('Todos los contratistas', 'todos'));
+  [...new Set(CONTRATOS.map(c => c.contratista))].forEach(n => fc.add(new Option(n, n)));
+  fc.addEventListener('change', e => { filtroContratista = e.target.value; render(); });
+
+  $('fDesde').addEventListener('change', e => { filtroDesde = e.target.value; render(); });
+  $('fHasta').addEventListener('change', e => { filtroHasta = e.target.value; render(); });
+  $('fClear').addEventListener('click', () => { filtroDesde=''; filtroHasta=''; $('fDesde').value=''; $('fHasta').value=''; render(); });
+
+  $('modalOv').addEventListener('click', e => { if(e.target === $('modalOv')) closeModal(); });
+  document.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal(); });
+
+  render();
+}
+window.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>
