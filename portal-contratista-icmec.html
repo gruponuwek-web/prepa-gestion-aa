@@ -8,13 +8,12 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Manrope:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  /* ============ Tokens ============ */
   :root{
     --blue-900:#0a335f; --blue-800:#0b3e72; --blue-700:#0e4d8b; --blue-600:#1565a8;
     --blue-100:#dcebf8; --blue-50:#f1f7fc;
     --ink:#14202c; --muted:#5d6e7d; --faint:#8a99a6; --line:#dde5ec;
     --bg:#e9eef3; --card:#ffffff;
-    --amber:#d18a23; --teal:#12907e; --green:#2f8a3e; --red:#b5403a; --disp:#cdd9e4;
+    --amber:#d18a23; --teal:#12907e; --green:#2f8a3e; --disp:#cdd9e4;
     --ok:#137a4d; --ok-bg:#e4f2ea; --warn:#a85a12; --warn-bg:#fbeede;
     --radius:14px; --radius-sm:9px;
     --shadow:0 1px 2px rgba(13,42,71,.05), 0 8px 24px rgba(13,42,71,.06);
@@ -25,7 +24,7 @@
   .num{font-family:'IBM Plex Mono',monospace}
   .card{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow)}
 
-  /* ============ Top bar ============ */
+  /* Top bar */
   .topnav{display:flex; align-items:center; gap:18px; background:linear-gradient(180deg,var(--blue-700),var(--blue-900)); color:#fff; padding:12px 24px; flex-wrap:wrap}
   .topnav .brand{display:flex; align-items:center; gap:11px}
   .topnav .mark{width:40px; height:40px; border-radius:10px; background:#fff; flex:none; display:flex; align-items:center; justify-content:center; font-family:'Bricolage Grotesque',sans-serif; font-weight:800; color:var(--blue-700); font-size:18px}
@@ -40,7 +39,6 @@
   .who b{display:block; font-family:'Bricolage Grotesque',sans-serif; font-size:15px}
   .who span{font-size:11px; color:var(--blue-100); text-transform:uppercase; letter-spacing:.5px}
 
-  /* ============ Main / secciones ============ */
   .main{max-width:1180px; margin:0 auto; padding:24px 26px 60px; min-width:0}
   .mainhead{display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin-bottom:18px}
   .mainhead h2{font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:24px; color:var(--blue-900); margin:0}
@@ -49,7 +47,12 @@
   .section.active{display:block; animation:rise .35s ease}
   .sectitle{font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:15px; color:var(--blue-900); margin:22px 2px 10px}
 
-  /* ============ KPIs ============ */
+  /* Filtro por fraccionamiento */
+  .ffilter{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:18px}
+  .fbtn{font-family:'Manrope'; font-size:13.5px; font-weight:600; cursor:pointer; border:1px solid var(--line); background:#fff; color:var(--muted); border-radius:22px; padding:8px 16px}
+  .fbtn:hover{background:var(--blue-50)}
+  .fbtn.active{background:var(--blue-700); color:#fff; border-color:var(--blue-700)}
+
   .kpis{display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:12px}
   .kpi{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:14px 16px; box-shadow:var(--shadow)}
   .kpi .k{font-size:10.5px; text-transform:uppercase; letter-spacing:.5px; color:var(--faint); font-weight:700}
@@ -57,12 +60,11 @@
   .kpi .v.sm{font-size:17px}
   .kpi .s{font-size:11px; color:var(--muted); margin-top:2px}
 
-  /* ============ Contratos ============ */
   .contracts{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px}
   .ct{padding:16px 18px}
   .ct .top{display:flex; justify-content:space-between; align-items:flex-start; gap:8px}
-  .ct h3{font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:20px; color:var(--blue-900); margin:0}
-  .ct .meta{font-size:12px; color:var(--muted); margin-top:1px}
+  .ct h3{font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:19px; color:var(--blue-900); margin:0}
+  .ct .meta{font-size:12px; color:var(--muted); margin-top:2px}
   .ct .pct{font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:18px; color:var(--teal)}
   .bar{display:flex; height:12px; border-radius:7px; overflow:hidden; margin:13px 0 9px; background:var(--blue-50)}
   .bar i{display:block; height:100%}
@@ -75,13 +77,13 @@
   .mini:hover{background:var(--blue-50)}
   .detail{display:none; margin-top:12px; border-top:1px solid var(--line); padding-top:10px}
   .detail.open{display:block}
-  .detail table{width:100%; border-collapse:collapse; font-size:12.5px}
-  .detail th{text-align:right; color:var(--faint); font-weight:700; font-size:10.5px; text-transform:uppercase; letter-spacing:.4px; padding:4px 6px; background:none}
+  .detail table{width:100%; border-collapse:collapse; font-size:12px}
+  .detail th{text-align:right; color:var(--faint); font-weight:700; font-size:10px; text-transform:uppercase; letter-spacing:.3px; padding:4px 5px}
   .detail th.l, .detail td.l{text-align:left}
-  .detail td{text-align:right; padding:5px 6px; border-top:1px solid var(--line)}
+  .detail td{text-align:right; padding:5px; border-top:1px solid var(--line)}
   .detail td.l{font-weight:600; color:var(--blue-900)}
+  .detail .calc{font-size:11.5px; color:var(--muted); padding:8px 2px 0}
 
-  /* ============ Gráfica + alertas ============ */
   .twocol{display:grid; grid-template-columns:1.55fr 1fr; gap:12px; align-items:stretch}
   .chartcard{padding:14px 16px}
   .chartcard h4{font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:13.5px; color:var(--blue-900); margin:0 0 8px}
@@ -91,17 +93,16 @@
   .alert{display:flex; gap:11px; align-items:flex-start; padding:12px 0; border-bottom:1px dashed var(--line); font-size:13px}
   .alert:last-child{border-bottom:0}
   .alert .ic{width:26px; height:26px; border-radius:7px; flex:none; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:14px}
-  .ic-warn{background:var(--warn-bg); color:var(--warn)} .ic-info{background:var(--blue-50); color:var(--blue-700)} .ic-ok{background:var(--ok-bg); color:var(--ok)}
-  .alert b{font-weight:700}
-  .alert .sub{color:var(--muted); font-size:12px}
+  .ic-warn{background:var(--warn-bg); color:var(--warn)} .ic-info{background:var(--blue-50); color:var(--blue-700)}
+  .alert b{font-weight:700} .alert .sub{color:var(--muted); font-size:12px}
 
-  /* ============ Pedido: hero contrato ============ */
+  /* Pedido */
   .hero{position:relative; display:flex; flex-wrap:wrap; align-items:center; gap:26px; background:var(--card); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); padding:20px 24px 20px 28px; overflow:hidden}
   .hero::before{content:""; position:absolute; left:0; top:0; bottom:0; width:6px; background:linear-gradient(180deg,var(--blue-600),var(--blue-900))}
-  .hero-pick{display:flex; flex-direction:column; gap:4px; min-width:230px}
+  .hero-pick{display:flex; flex-direction:column; gap:4px; min-width:250px}
   .hero-label{font-size:11px; text-transform:uppercase; letter-spacing:1.2px; color:var(--amber); font-weight:700}
   .select-wrap{position:relative}
-  .hero-select{appearance:none; -webkit-appearance:none; font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:30px; letter-spacing:-.5px; color:var(--blue-900); background:transparent; border:0; border-bottom:2px dashed var(--blue-100); padding:2px 34px 4px 2px; cursor:pointer; width:100%}
+  .hero-select{appearance:none; -webkit-appearance:none; font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:26px; letter-spacing:-.5px; color:var(--blue-900); background:transparent; border:0; border-bottom:2px dashed var(--blue-100); padding:2px 34px 4px 2px; cursor:pointer; width:100%}
   .hero-select:focus{outline:none; border-bottom-color:var(--blue-600)}
   .select-wrap::after{content:""; position:absolute; right:6px; top:50%; width:11px; height:11px; margin-top:-8px; border-right:2.5px solid var(--blue-600); border-bottom:2.5px solid var(--blue-600); transform:rotate(45deg); pointer-events:none}
   .hero-meta{display:flex; flex-wrap:wrap; gap:22px; flex:1}
@@ -109,10 +110,9 @@
   .meta b{font-size:14.5px; font-weight:600; color:var(--ink)}
   .hero-saldo{text-align:center; background:var(--blue-50); border:1px solid var(--blue-100); border-radius:var(--radius-sm); padding:10px 18px}
   .hero-saldo span{display:block; font-size:10.5px; text-transform:uppercase; letter-spacing:.6px; color:var(--blue-700); font-weight:700}
-  .hero-saldo b{font-family:'IBM Plex Mono',monospace; font-size:28px; font-weight:600; color:var(--blue-900); line-height:1.1}
+  .hero-saldo b{font-family:'IBM Plex Mono',monospace; font-size:26px; font-weight:600; color:var(--blue-900); line-height:1.1}
   .hero-saldo small{font-size:11px; color:var(--faint)}
 
-  /* ============ Pedido: form + tabla ============ */
   .pedido-cols{display:grid; grid-template-columns:320px minmax(0,1fr); gap:12px; margin-top:14px}
   .fields{padding:6px 18px 14px}
   .field{padding:9px 0; border-bottom:1px dashed var(--line)}
@@ -128,18 +128,21 @@
   table.data{width:100%; border-collapse:collapse}
   table.data thead th{font-size:10.5px; text-transform:uppercase; letter-spacing:.5px; color:var(--muted); font-weight:700; text-align:right; padding:11px 14px; background:#f6f9fc; border-bottom:1px solid var(--line)}
   table.data thead th.l{text-align:left}
-  table.data tbody td{padding:12px 14px; border-bottom:1px solid var(--line); font-size:14px; text-align:right; vertical-align:middle}
+  table.data tbody td{padding:10px 14px; border-bottom:1px solid var(--line); font-size:14px; text-align:right; vertical-align:middle}
   table.data tbody td.l{text-align:left}
   .model{font-family:'Bricolage Grotesque',sans-serif; font-weight:700; font-size:16px; color:var(--blue-900)}
+  .model small{display:block; font-family:'Manrope'; font-weight:500; font-size:11px; color:var(--faint)}
+  .elem{font-weight:600; color:var(--muted)}
+  .modelcell{border-right:1px solid var(--line)}
   .pill{display:inline-block; min-width:30px; padding:2px 8px; border-radius:20px; background:var(--ok-bg); color:var(--ok); font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:13px}
   .pill.zero{background:#f3e3e3; color:#9a3333}
-  .qty{width:74px; text-align:center; font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:15px; border:1px solid var(--line); border-radius:var(--radius-sm); padding:7px 4px; background:#fbfcfe; color:var(--ink)}
+  .qty{width:72px; text-align:center; font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:15px; border:1px solid var(--line); border-radius:var(--radius-sm); padding:7px 4px; background:#fbfcfe; color:var(--ink)}
   .qty:focus{outline:none; border-color:var(--blue-600); box-shadow:0 0 0 3px var(--blue-100)}
   .sub-amt{font-family:'IBM Plex Mono',monospace; color:var(--ink)} .sub-amt.zero{color:var(--faint)}
   .note{font-size:12px; color:var(--faint); padding:0 18px 14px; margin-top:-2px}
   .footrow{display:flex; flex-wrap:wrap; gap:18px; align-items:flex-start; padding:18px; border-top:1px solid var(--line)}
   .stats{display:flex; gap:10px; flex:1; flex-wrap:wrap}
-  .stat{background:#f6f9fc; border:1px solid var(--line); border-radius:var(--radius-sm); padding:11px 14px; min-width:118px}
+  .stat{background:#f6f9fc; border:1px solid var(--line); border-radius:var(--radius-sm); padding:11px 14px; min-width:120px}
   .stat .k{font-size:11px; text-transform:uppercase; letter-spacing:.5px; color:var(--faint); font-weight:600}
   .stat .v{font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:20px; color:var(--blue-900); margin-top:2px}
   .totals{min-width:230px; margin-left:auto}
@@ -156,7 +159,7 @@
   .banner.show{display:flex; animation:rise .3s ease}
   .banner b{font-weight:700} .banner .bs{font-size:13px; color:#2c6048; margin-top:2px}
 
-  /* ============ Seguimiento / finanzas ============ */
+  /* Seguimiento */
   .statline{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px}
   .scount{background:var(--card); border:1px solid var(--line); border-radius:20px; padding:6px 13px; font-size:12.5px; font-weight:600; color:var(--muted); display:inline-flex; gap:7px; align-items:center}
   .scount b{font-family:'IBM Plex Mono',monospace; color:var(--blue-900)}
@@ -169,22 +172,51 @@
   .c-solicitado{background:#eef1f4; color:#56646f} .c-confirmado{background:var(--blue-50); color:var(--blue-700)}
   .c-transito{background:#fbefda; color:#9a6516} .c-entregado{background:#e1f1ee; color:#0e7163}
   .c-conciliado{background:#e7f3e8; color:#2c7a39} .c-parcial{background:#f7e7e0; color:#a8501f}
-  .c-pagada{background:#e7f3e8; color:#2c7a39} .c-pendiente{background:#fbefda; color:#9a6516} .c-vencida{background:#f7e7e6; color:#9a3333}
+  .c-pagada{background:#e7f3e8; color:#2c7a39} .c-pendiente{background:#fbefda; color:#9a6516}
   .empty{padding:24px 16px; text-align:center; color:var(--faint); font-size:13px}
   .prelim{font-size:11.5px; font-weight:600; color:var(--warn); background:var(--warn-bg); border:1px solid #f0d8b6; padding:2px 9px; border-radius:20px}
   .ocs{font-size:12px; color:var(--muted)}
 
-  /* ============ Responsive ============ */
+  /* Select de proyecto (más chico que el de contrato) */
+  .hero-select-sm{font-size:18px; border-bottom-style:solid; border-bottom-color:var(--blue-100)}
+
+  /* Filas clicables del historial */
+  #histBody tr{cursor:pointer; transition:background .12s}
+  #histBody tr:hover{background:var(--blue-50)}
+
+  /* Modal de detalle de orden */
+  .modal-ov{position:fixed; inset:0; background:rgba(10,30,55,.5); display:none; align-items:flex-start; justify-content:center; padding:48px 16px; z-index:60; overflow:auto}
+  .modal-ov.show{display:flex; animation:fade .2s ease}
+  .modal{background:#fff; border-radius:16px; max-width:760px; width:100%; box-shadow:0 24px 70px rgba(8,28,50,.4); animation:pop .26s ease}
+  .modal-h{display:flex; justify-content:space-between; align-items:flex-start; gap:14px; padding:22px 26px 18px; border-bottom:1px solid var(--line)}
+  .modal-h .hl{font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--amber); font-weight:700}
+  .modal-h h3{font-family:'Bricolage Grotesque',sans-serif; font-weight:800; font-size:24px; color:var(--blue-900); margin:3px 0 4px}
+  .modal-h .msub{font-size:13px; color:var(--muted)}
+  .modal-h .right{display:flex; align-items:center; gap:12px; flex:none}
+  .modal-close{width:32px; height:32px; border-radius:9px; border:1px solid var(--line); background:#fff; color:var(--muted); font-size:16px; cursor:pointer; line-height:1}
+  .modal-close:hover{background:#f4f7fa; color:var(--ink)}
+  .modal-body{padding:20px 26px 24px}
+  .mdates{display:flex; flex-wrap:wrap; gap:26px; margin-bottom:16px}
+  .mdates .meta span{display:block; font-size:11px; text-transform:uppercase; letter-spacing:.5px; color:var(--faint); font-weight:600; margin-bottom:2px}
+  .mdates .meta b{font-size:14px; font-weight:600; color:var(--ink)}
+  .modal-body table{width:100%; border-collapse:collapse}
+  .modal-body thead th{font-size:10.5px; text-transform:uppercase; letter-spacing:.4px; color:var(--muted); font-weight:700; text-align:right; padding:9px 12px; background:#f6f9fc; border-bottom:1px solid var(--line)}
+  .modal-body thead th.l{text-align:left}
+  .modal-body tbody td{padding:9px 12px; border-bottom:1px solid var(--line); font-size:13.5px; text-align:right}
+  .modal-body tbody td.l{text-align:left; font-weight:600; color:var(--blue-900)}
+  .modal-note{font-size:12.5px; color:var(--warn); background:var(--warn-bg); border:1px solid #f0d8b6; border-radius:9px; padding:9px 12px; margin-top:14px}
+  .modal-tot{margin-top:14px; margin-left:auto; max-width:260px}
+  @keyframes fade{from{opacity:0}to{opacity:1}}
+  @keyframes pop{from{opacity:0; transform:translateY(-10px) scale(.99)}to{opacity:1; transform:none}}
+
   @media(max-width:1000px){.kpis{grid-template-columns:repeat(3,1fr)}}
   @media(max-width:900px){.contracts{grid-template-columns:1fr} .twocol{grid-template-columns:1fr} .pedido-cols{grid-template-columns:1fr}}
   @media(max-width:760px){
     .topnav{gap:10px; padding:12px 14px}
-    .who{margin-left:0; order:2}
-    .nav{order:3; width:100%}
+    .who{margin-left:0; order:2} .nav{order:3; width:100%}
     .main{padding:18px 14px 50px}
   }
   @media(max-width:520px){.kpis{grid-template-columns:repeat(2,1fr)}}
-
   @keyframes rise{from{opacity:0; transform:translateY(-6px)}to{opacity:1; transform:none}}
 </style>
 </head>
@@ -206,12 +238,13 @@
 
     <!-- ===== Tablero ===== -->
     <section class="section active" id="sec-tablero">
+      <div class="ffilter" id="ffilter"></div>
       <div class="kpis" id="kpis"></div>
       <div class="sectitle">Contratos y avance</div>
       <div class="contracts" id="contracts"></div>
       <div class="sectitle">Avance por modelo y alertas</div>
       <div class="twocol">
-        <div class="card chartcard"><h4>Avance por modelo de casa</h4><div class="chartbox"><canvas id="chModelo"></canvas></div></div>
+        <div class="card chartcard"><h4>Avance por modelo de casa (losas)</h4><div class="chartbox"><canvas id="chModelo"></canvas></div></div>
         <div class="card"><h4 class="panel-h">Alertas</h4><div class="alerts" id="alerts"></div></div>
       </div>
     </section>
@@ -220,13 +253,12 @@
     <section class="section" id="sec-pedido">
       <div class="banner" id="banner"><div style="font-size:20px">✓</div><div><b>Requerimiento enviado a PREPA.</b><div class="bs" id="bannerSub"></div></div></div>
       <div class="hero">
+        <div class="hero-pick"><span class="hero-label">Proyecto</span><div class="select-wrap"><select id="selProyecto" class="hero-select hero-select-sm" aria-label="Proyecto"></select></div></div>
         <div class="hero-pick"><span class="hero-label">Contrato</span><div class="select-wrap"><select id="selContrato" class="hero-select" aria-label="Contrato"></select></div></div>
         <div class="hero-meta">
-          <div class="meta"><span>Desarrollador</span><b id="m_des">—</b></div>
           <div class="meta"><span>Fraccionamiento</span><b id="m_fra">—</b></div>
-          <div class="meta"><span>Privada / etapa</span><b id="m_pri">—</b></div>
         </div>
-        <div class="hero-saldo"><span>Casas disponibles</span><b id="m_saldo">0</b><small id="m_saldo_de">de 0</small></div>
+        <div class="hero-saldo"><span>Losas disponibles</span><b id="m_saldo">0</b><small id="m_saldo_de">de 0</small></div>
       </div>
 
       <div class="pedido-cols">
@@ -236,24 +268,23 @@
             <div class="field"><label>Responsable</label><select id="f_resp"></select></div>
             <div class="field"><label>Teléfono</label><div class="val" id="f_tel">—</div></div>
             <div class="field"><label>Recibe</label><select id="f_recibe"></select></div>
-            <div class="field"><label>Manzana</label><input id="f_manzana" value="48"></div>
             <div class="field"><label>Lugar de entrega</label><input id="f_lugar" value="Col. Olmos"></div>
             <div class="field"><label>Fecha de pedido <span class="hint">automática</span></label><div class="val" id="f_pedido">—</div></div>
-            <div class="field"><label>Fecha de entrega solicitada</label><input id="f_entrega" type="date"></div>
+            <div class="field"><label>Fecha de entrega solicitada <span class="hint">no dentro de 48 h</span></label><input id="f_entrega" type="date"></div>
             <div class="field"><label>Orden de compra</label><span class="oc-pending">Por asignar por PREPA</span></div>
           </div>
         </aside>
         <main class="card">
-          <h4 class="panel-h">Requerimiento por modelo</h4>
+          <h4 class="panel-h">Requerimiento por losas</h4>
           <table class="data">
-            <thead><tr><th class="l">Modelo</th><th>Precio por casa</th><th>Disponible</th><th>Casas a pedir</th><th>Subtotal</th></tr></thead>
+            <thead><tr><th class="l">Modelo</th><th class="l">Elemento</th><th>P.U. por losa</th><th>Disponible</th><th>Losas a pedir</th><th>Subtotal</th></tr></thead>
             <tbody id="rows"></tbody>
           </table>
-          <div class="note">El precio por casa incluye todo el material del modelo. Un requerimiento es por un contrato a la vez, con varias casas adentro.</div>
+          <div class="note">Se pide losa por losa: cada modelo lleva sus losas de entrepiso y de azotea. El disponible sale de las casas autorizadas por la receta de cada modelo.</div>
           <div class="footrow">
             <div class="stats">
-              <div class="stat"><div class="k">Casas disponibles</div><div class="v" id="s_disp">0</div></div>
-              <div class="stat"><div class="k">Casas en este pedido</div><div class="v" id="s_ped">0</div></div>
+              <div class="stat"><div class="k">Losas disponibles</div><div class="v" id="s_disp">0</div></div>
+              <div class="stat"><div class="k">Losas en este pedido</div><div class="v" id="s_ped">0</div></div>
             </div>
             <div class="totals">
               <div class="tline"><span>Subtotal</span><span class="num" id="t_sub">$0.00</span></div>
@@ -271,17 +302,15 @@
 
     <!-- ===== Seguimiento y finanzas ===== -->
     <section class="section" id="sec-seguimiento">
+      <div class="ffilter" id="ffilterSeg"></div>
       <div class="sectitle">Seguimiento de órdenes por estado de entrega</div>
       <div class="statline" id="statline"></div>
       <div class="filters" id="filters">
         <button class="pill-f active" data-c="todos">Todos los contratos</button>
-        <button class="pill-f" data-c="23">Contrato 23</button>
-        <button class="pill-f" data-c="24">Contrato 24</button>
-        <button class="pill-f" data-c="25">Contrato 25</button>
         <select id="fEstado"><option value="todos">Todos los estados</option><option>Solicitado</option><option>Confirmado</option><option>En tránsito</option><option>Parcial</option><option>Entregado</option><option>Conciliado</option></select>
       </div>
       <div class="card" style="overflow:hidden">
-        <table class="data"><thead><tr><th class="l">Folio OC</th><th class="l">Fecha</th><th class="l">Contrato</th><th class="l">Casas (modelo)</th><th>Monto</th><th class="l">Entrega</th><th class="l">Estado</th></tr></thead><tbody id="histBody"></tbody></table>
+        <table class="data"><thead><tr><th class="l">Folio OC</th><th class="l">Fecha</th><th class="l">Contrato · lote</th><th class="l">Losas (modelo · elemento)</th><th>Monto</th><th class="l">Entrega</th><th class="l">Estado</th></tr></thead><tbody id="histBody"></tbody></table>
       </div>
 
       <div class="sectitle">Finanzas · facturación <span class="prelim">modelo preliminar</span></div>
@@ -289,60 +318,62 @@
       <div class="card" style="overflow:hidden">
         <table class="data"><thead><tr><th class="l">Factura</th><th class="l">Órdenes incluidas</th><th class="l">Fecha</th><th>Monto</th><th class="l">Estado</th></tr></thead><tbody id="facBody"></tbody></table>
       </div>
-      <div class="note" style="padding:10px 2px 0">Tentativo: una factura puede agrupar varias órdenes de compra. Falta definir si PREPA factura por OC, por entrega o agrupada, y la consulta/descarga del CFDI.</div>
     </section>
 
   </main>
 </div>
+
+<div class="modal-ov" id="modalOv"><div class="modal" id="modalCard"></div></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
 <script>
 "use strict";
 
-/* =========================================================
-   DATOS  (en producción vendrían del backend)
-   ========================================================= */
-const CATALOGO = {
-  palma:    {nombre:'Palma',     precio: 11770.43 + 12135.73},
-  palermo:  {nombre:'Palermo',   precio: 10676.84 + 13246.44},
-  cartagena:{nombre:'Cartagena', precio: 14613.30 + 16211.05},
-  jerez:    {nombre:'Jerez',     precio:  8921.92 + 10042.65},
-  sevilla:  {nombre:'Sevilla',   precio: 21450.00},
-  verona:   {nombre:'Verona',    precio: 27800.00},
+/* ===================== DATOS ===================== */
+const IVA = 0.16;
+
+// Inventario de casas (modelos): receta de losas + precio por losa (entrepiso/azotea).
+const MODELOS = {
+  palma:    {nombre:'Palma',     ent:1, az:1, pEnt:11770.43, pAz:12135.73},
+  palermo:  {nombre:'Palermo',   ent:1, az:1, pEnt:10676.84, pAz:13246.44},
+  cartagena:{nombre:'Cartagena', ent:2, az:1, pEnt:14613.30, pAz:16211.05},
+  jerez:    {nombre:'Jerez',     ent:1, az:1, pEnt:8921.92,  pAz:10042.65},
+  sevilla:  {nombre:'Sevilla',   ent:2, az:1, pEnt:13200.00, pAz:14800.00},
+  verona:   {nombre:'Verona',    ent:2, az:1, pEnt:16500.00, pAz:18400.00},
 };
+
+// Contratos de ICMEC: cada uno 1 lote, con sus casas por modelo. Proyecto · fraccionamiento.
 const CONTRATOS = [
-  {num:'23', desarrollador:'CESVIN', fracc:'Andalucía Residencial', privada:'Santa Elena', modelos:[{id:'palma',asig:3},{id:'palermo',asig:6},{id:'cartagena',asig:4},{id:'jerez',asig:5}]},
-  {num:'24', desarrollador:'CESVIN', fracc:'Andalucía Residencial', privada:'Los Álamos',  modelos:[{id:'jerez',asig:8},{id:'cartagena',asig:2},{id:'sevilla',asig:4}]},
-  {num:'25', desarrollador:'CESVIN', fracc:'Puerta del Sol',        privada:'Roble',       modelos:[{id:'palma',asig:5},{id:'verona',asig:3},{id:'palermo',asig:2}]},
+  {num:'23', lote:'48', proyecto:'Andalucía Residencial', fracc:'Santa Elena', casas:{palma:3, palermo:6, cartagena:4, jerez:5}},
+  {num:'31', lote:'51', proyecto:'Andalucía Residencial', fracc:'Santa Elena', casas:{jerez:4, cartagena:2}},
+  {num:'24', lote:'52', proyecto:'Andalucía Residencial', fracc:'Los Álamos',  casas:{jerez:8, cartagena:2, sevilla:4}},
+  {num:'25', lote:'60', proyecto:'Puerta del Sol',        fracc:'Roble',       casas:{palma:5, verona:3, palermo:2}},
+  {num:'44', lote:'63', proyecto:'Puerta del Sol',        fracc:'Cedros',      casas:{palermo:5, cartagena:3}},
 ];
-// Cada pedido es de un contrato; entregadas por línea permite detectar parciales/ajustes.
+
+// Pedidos: líneas en losas (modelo + tipo 'ent'|'az').
 const PEDIDOS = [
-  {folio:'IC-07', contrato:'23', fecha:'2026-05-08', entrega:'2026-05-12', estado:'Conciliado',  lineas:[{id:'jerez',casas:1,entregadas:1}]},
-  {folio:'IC-09', contrato:'23', fecha:'2026-05-12', entrega:'2026-05-18', estado:'Parcial',     lineas:[{id:'palermo',casas:2,entregadas:1},{id:'cartagena',casas:1,entregadas:1}]},
-  {folio:'IC-12', contrato:'24', fecha:'2026-05-16', entrega:'2026-05-30', estado:'En tránsito', lineas:[{id:'jerez',casas:2,entregadas:0}]},
-  {folio:'IC-15', contrato:'23', fecha:'2026-05-20', entrega:'2026-06-02', estado:'Confirmado',  lineas:[{id:'palma',casas:1,entregadas:0},{id:'jerez',casas:1,entregadas:0}]},
-  {folio:'IC-18', contrato:'25', fecha:'2026-05-26', entrega:'—',          estado:'Solicitado',  lineas:[{id:'verona',casas:1,entregadas:0}]},
+  {id:'p1', folio:'IC-07', contrato:'23', fecha:'2026-05-08', entrega:'2026-05-12', estado:'Conciliado',  lineas:[{m:'jerez',t:'az',losas:1,ent:1}]},
+  {id:'p2', folio:'IC-09', contrato:'23', fecha:'2026-05-12', entrega:'2026-05-19', estado:'Parcial',     lineas:[{m:'palermo',t:'ent',losas:2,ent:1},{m:'cartagena',t:'ent',losas:1,ent:1}]},
+  {id:'p3', folio:'IC-12', contrato:'24', fecha:'2026-05-16', entrega:'2026-05-30', estado:'En tránsito', lineas:[{m:'jerez',t:'ent',losas:2,ent:0}]},
+  {id:'p4', folio:'IC-15', contrato:'23', fecha:'2026-05-20', entrega:'2026-06-02', estado:'Confirmado',  lineas:[{m:'palma',t:'ent',losas:1,ent:0},{m:'jerez',t:'ent',losas:1,ent:0}]},
+  {id:'p5', folio:'IC-18', contrato:'25', fecha:'2026-05-26', entrega:'—',          estado:'Solicitado',  lineas:[{m:'verona',t:'ent',losas:1,ent:0}]},
 ];
-const FACTURAS = [
-  {folio:'F-1042', ocs:['IC-07','IC-09'], fecha:'2026-05-20', estado:'Pendiente'},
-];
+let pedidoSeq = 100;
+const FACTURAS = [ {folio:'F-1042', ocs:['IC-07','IC-09'], fecha:'2026-05-20', estado:'Pendiente'} ];
 const RESPONSABLES = [
-  {nombre:'Kevin Hernández', tel:'55-1028-9542'},
-  {nombre:'Laura Medina',    tel:'771-118-2204'},
-  {nombre:'Raúl Ortega',     tel:'771-205-7781'},
+  {nombre:'Kevin Hernández', tel:'55-1028-9542'}, {nombre:'Laura Medina', tel:'771-118-2204'}, {nombre:'Raúl Ortega', tel:'771-205-7781'},
 ];
 const RECIBE = ['José Pérez (residente)', 'Mario Ríos (almacén)', 'Almacén de obra'];
 
-const IVA = 0.16;
 const ESTADOS = ['Solicitado','Confirmado','En tránsito','Parcial','Entregado','Conciliado'];
 const CHIP = {Solicitado:'c-solicitado',Confirmado:'c-confirmado','En tránsito':'c-transito',Parcial:'c-parcial',Entregado:'c-entregado',Conciliado:'c-conciliado'};
-const FCHIP = {Pagada:'c-pagada',Pendiente:'c-pendiente',Vencida:'c-vencida'};
+const FCHIP = {Pagada:'c-pagada',Pendiente:'c-pendiente'};
 const COL = {ent:'#12907e', pro:'#d18a23', dis:'#cdd9e4'};
+const TIPO = {ent:'Entrepiso', az:'Azotea'};
 
-/* =========================================================
-   HELPERS
-   ========================================================= */
+/* ===================== HELPERS ===================== */
 const $  = id => document.getElementById(id);
 const mxn  = new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN'});
 const mxn0 = new Intl.NumberFormat('es-MX',{style:'currency',currency:'MXN',maximumFractionDigits:0});
@@ -353,37 +384,42 @@ const pct = (parte,total) => total>0 ? Math.round(parte/total*100) : 0;
 const width = (parte,total) => total>0 ? (parte/total*100) : 0;
 
 const contratoPorNum = num => CONTRATOS.find(c => c.num === num);
-const subtotal = p => p.lineas.reduce((s,l)=>s + l.casas*CATALOGO[l.id].precio, 0);
-const totalConIva = p => subtotal(p) * (1+IVA);
-const sumaCasas = p => p.lineas.reduce((s,l)=>s+l.casas, 0);
+const precioLosa = (modelo, tipo) => tipo==='ent' ? MODELOS[modelo].pEnt : MODELOS[modelo].pAz;
+const losasPorCasa = (modelo, tipo) => tipo==='ent' ? MODELOS[modelo].ent : MODELOS[modelo].az;
 
-// Resumen por modelo de un contrato: {asig, pedido, entregado}
+// Losas autorizadas de un (contrato, modelo, tipo) = casas × receta.
+function autorizadas(num, modelo, tipo){
+  const c = contratoPorNum(num); const casas = (c.casas[modelo] || 0);
+  return casas * losasPorCasa(modelo, tipo);
+}
+// Losas ya pedidas de un (contrato, modelo, tipo) en todos los pedidos.
+function pedidasDe(num, modelo, tipo){
+  let s = 0;
+  PEDIDOS.filter(p => p.contrato === num).forEach(p => p.lineas.forEach(l => { if(l.m===modelo && l.t===tipo) s += l.losas; }));
+  return s;
+}
+const disponible = (num, modelo, tipo) => autorizadas(num, modelo, tipo) - pedidasDe(num, modelo, tipo);
+
+// Resumen de un contrato en losas totales (entrepiso + azotea): {aut, pedido, entregado}.
 function resumenContrato(c){
-  const r = {};
-  c.modelos.forEach(m => r[m.id] = {asig:m.asig, pedido:0, entregado:0});
-  PEDIDOS.filter(p => p.contrato === c.num).forEach(p =>
-    p.lineas.forEach(l => { if(r[l.id]){ r[l.id].pedido += l.casas; r[l.id].entregado += l.entregadas; } })
-  );
-  return r;
+  let aut=0, pedido=0, entregado=0;
+  Object.keys(c.casas).forEach(m => { aut += autorizadas(c.num,m,'ent') + autorizadas(c.num,m,'az'); });
+  PEDIDOS.filter(p => p.contrato === c.num).forEach(p => p.lineas.forEach(l => { pedido += l.losas; entregado += l.ent; }));
+  return { aut, pedido, entregado, proceso:pedido-entregado, disponible:aut-pedido };
 }
-// Casas disponibles de un modelo en un contrato = asignadas − ya pedidas.
-function disponible(num, modeloId){
-  const c = contratoPorNum(num);
-  const m = c.modelos.find(x => x.id === modeloId);
-  const asig = m ? m.asig : 0;
-  let ped = 0;
-  PEDIDOS.filter(p => p.contrato === num).forEach(p =>
-    p.lineas.forEach(l => { if(l.id === modeloId) ped += l.casas; })
-  );
-  return asig - ped;
-}
+const subtotalPedido = p => p.lineas.reduce((s,l)=>s + l.losas*precioLosa(l.m,l.t), 0);
+const totalPedido = p => subtotalPedido(p) * (1+IVA);
+const losasPedido = p => p.lineas.reduce((s,l)=>s+l.losas, 0);
 
-/* =========================================================
-   NAVEGACIÓN
-   ========================================================= */
+const fraccionamientos = () => [...new Set(CONTRATOS.map(c => c.fracc))];
+const proyectos = () => [...new Set(CONTRATOS.map(c => c.proyecto))];
+const contratosFiltrados = () => filtroFracc==='todos' ? CONTRATOS : CONTRATOS.filter(c => c.fracc === filtroFracc);
+const pedidosDeContratos = nums => PEDIDOS.filter(p => nums.includes(p.contrato));
+
+/* ===================== NAVEGACIÓN ===================== */
 const TITULOS = {
   tablero:     ['Tablero', 'Resumen de contratos y avance'],
-  pedido:      ['Nuevo requerimiento', 'Un contrato a la vez, con varias casas'],
+  pedido:      ['Nuevo requerimiento', 'Se pide por losas, un contrato a la vez'],
   seguimiento: ['Seguimiento y finanzas', 'Estado de entrega y facturación'],
 };
 function navTo(sec){
@@ -396,76 +432,83 @@ function navTo(sec){
   if(sec === 'seguimiento') renderSeguimiento();
 }
 
-/* =========================================================
-   TABLERO
-   ========================================================= */
+/* ===================== TABLERO ===================== */
+let filtroFracc = 'todos';
 let chartModelo = null;
 
-function renderTablero(){
-  // KPIs globales
-  let asig=0, ped=0, ent=0, imp=0;
-  CONTRATOS.forEach(c => Object.values(resumenContrato(c)).forEach(x => { asig+=x.asig; ped+=x.pedido; ent+=x.entregado; }));
-  PEDIDOS.forEach(p => imp += totalConIva(p));
-  const kpis = [
-    {k:'Casas autorizadas', v:asig},
-    {k:'Casas pedidas',     v:ped},
-    {k:'Casas entregadas',  v:ent},
-    {k:'Casas disponibles', v:asig-ped},
-    {k:'Avance (entregado)',v:pct(ent,asig)+'%'},
-    {k:'Importe ejercido',  v:mxn0.format(imp), sm:true, s:'IVA incluido'},
-  ];
-  $('kpis').innerHTML = kpis.map(x =>
-    `<div class="kpi"><div class="k">${x.k}</div><div class="v ${x.sm?'sm':''}">${x.v}</div>${x.s?`<div class="s">${x.s}</div>`:''}</div>`).join('');
+function renderFiltro(id){
+  const opts = ['todos', ...fraccionamientos()];
+  $(id || 'ffilter').innerHTML = opts.map(f =>
+    `<button class="fbtn ${f===filtroFracc?'active':''}" data-f="${f}">${f==='todos'?'Todos':f}</button>`).join('');
+}
 
-  // Tarjetas de contrato
-  $('contracts').innerHTML = CONTRATOS.map(c => {
+function renderTablero(){
+  renderFiltro();
+  const cons = contratosFiltrados();
+  const nums = cons.map(c => c.num);
+  const peds = pedidosDeContratos(nums);
+
+  let aut=0, ped=0, ent=0, imp=0;
+  cons.forEach(c => { const r = resumenContrato(c); aut+=r.aut; ped+=r.pedido; ent+=r.entregado; });
+  peds.forEach(p => imp += totalPedido(p));
+
+  $('kpis').innerHTML = [
+    {k:'Losas autorizadas', v:aut},
+    {k:'Losas pedidas',     v:ped},
+    {k:'Losas entregadas',  v:ent},
+    {k:'Losas disponibles', v:aut-ped},
+    {k:'Avance (entregado)',v:pct(ent,aut)+'%'},
+    {k:'Importe ejercido',  v:mxn0.format(imp), sm:true, s:'IVA incluido'},
+  ].map(x => `<div class="kpi"><div class="k">${x.k}</div><div class="v ${x.sm?'sm':''}">${x.v}</div>${x.s?`<div class="s">${x.s}</div>`:''}</div>`).join('');
+
+  $('contracts').innerHTML = cons.map(c => {
     const r = resumenContrato(c);
-    let a=0,p=0,e=0; Object.values(r).forEach(x => { a+=x.asig; p+=x.pedido; e+=x.entregado; });
-    const proc=p-e, disp=a-p;
-    const filas = c.modelos.map(m => {
-      const x = r[m.id];
-      return `<tr><td class="l">${CATALOGO[m.id].nombre}</td><td>${x.asig}</td><td>${x.pedido}</td><td>${x.entregado}</td><td>${x.asig-x.pedido}</td></tr>`;
+    const filas = Object.keys(c.casas).map(m => {
+      const casas = c.casas[m]; const M = MODELOS[m];
+      const autE = autorizadas(c.num,m,'ent'), autA = autorizadas(c.num,m,'az');
+      const dispE = disponible(c.num,m,'ent'), dispA = disponible(c.num,m,'az');
+      return `<tr><td class="l">${M.nombre}</td><td>${casas}</td><td>${M.ent}E + ${M.az}A</td><td>${autE} <span style="color:var(--faint)">(${dispE})</span></td><td>${autA} <span style="color:var(--faint)">(${dispA})</span></td></tr>`;
     }).join('');
     return `<div class="card ct">
-      <div class="top"><div><h3>Contrato ${c.num}</h3><div class="meta">${c.fracc} · ${c.privada}</div></div><div class="pct">${pct(e,a)}%</div></div>
-      <div class="bar"><i class="seg-ent" style="width:${width(e,a)}%"></i><i class="seg-pro" style="width:${width(proc,a)}%"></i><i class="seg-dis" style="width:${width(disp,a)}%"></i></div>
-      <div class="legend"><span><i class="dot seg-ent"></i>Entregado ${e}</span><span><i class="dot seg-pro"></i>En proceso ${proc}</span><span><i class="dot seg-dis"></i>Disponible ${disp}</span></div>
+      <div class="top"><div><h3>Contrato ${c.num} · Lote ${c.lote}</h3><div class="meta">${c.proyecto} · ${c.fracc}</div></div><div class="pct">${pct(r.entregado,r.aut)}%</div></div>
+      <div class="bar"><i class="seg-ent" style="width:${width(r.entregado,r.aut)}%"></i><i class="seg-pro" style="width:${width(r.proceso,r.aut)}%"></i><i class="seg-dis" style="width:${width(r.disponible,r.aut)}%"></i></div>
+      <div class="legend"><span><i class="dot seg-ent"></i>Entregado ${r.entregado}</span><span><i class="dot seg-pro"></i>En proceso ${r.proceso}</span><span><i class="dot seg-dis"></i>Disponible ${r.disponible}</span></div>
       <div class="actions">
         <button class="mini" onclick="this.closest('.ct').querySelector('.detail').classList.toggle('open')">Ver modelos</button>
         <button class="mini" onclick="verPedidos('${c.num}')">Ver pedidos</button>
       </div>
-      <div class="detail"><table><thead><tr><th class="l">Modelo</th><th>Autoriz.</th><th>Pedido</th><th>Entreg.</th><th>Dispon.</th></tr></thead><tbody>${filas}</tbody></table></div>
+      <div class="detail"><table><thead><tr><th class="l">Modelo</th><th>Casas</th><th>Receta</th><th>Losas entrep.</th><th>Losas azotea</th></tr></thead><tbody>${filas}</tbody></table>
+        <div class="calc">Losas = casas × receta. En paréntesis, las disponibles.</div></div>
     </div>`;
   }).join('');
 
-  // Alertas
-  const alertas = [
-    {t:'warn', ic:'!', b:'Ajuste de entrega pendiente', s:'IC-09 (contrato 23) entregó 2 de 3 casas · falta 1 Palermo'},
-    {t:'warn', ic:'!', b:'Entrega programada para hoy',  s:'IC-12 (contrato 24) · 30 may'},
-    {t:'info', ic:'i', b:'Pedido sin confirmar',         s:'IC-18 (contrato 25) solicitado el 26 may'},
-  ];
-  $('alerts').innerHTML = alertas.map(a =>
-    `<div class="alert"><div class="ic ic-${a.t}">${a.ic}</div><div><b>${a.b}</b><div class="sub">${a.s}</div></div></div>`).join('');
+  // Alertas (relevantes al filtro actual)
+  const alertas = [];
+  if(nums.includes('23')) alertas.push({t:'warn', ic:'!', b:'Ajuste de entrega pendiente', s:'IC-09 (contrato 23) entregó 2 de 3 losas · falta 1 entrepiso Palermo'});
+  if(nums.includes('24')) alertas.push({t:'warn', ic:'!', b:'Entrega programada para hoy', s:'IC-12 (contrato 24) · 30 may'});
+  if(nums.includes('25')) alertas.push({t:'info', ic:'i', b:'Pedido sin confirmar', s:'IC-18 (contrato 25) solicitado el 26 may'});
+  $('alerts').innerHTML = alertas.length ? alertas.map(a =>
+    `<div class="alert"><div class="ic ic-${a.t}">${a.ic}</div><div><b>${a.b}</b><div class="sub">${a.s}</div></div></div>`).join('')
+    : `<div class="empty">Sin alertas en este filtro</div>`;
 
-  renderChartModelo();
+  renderChartModelo(cons, peds);
 }
 
-function renderChartModelo(){
-  // Totales por modelo (sobre todos los contratos)
+function renderChartModelo(cons, peds){
   const ids = [];
   const aut = {}, ped = {}, ent = {};
-  CONTRATOS.forEach(c => c.modelos.forEach(m => {
-    if(!(m.id in aut)){ ids.push(m.id); aut[m.id]=0; ped[m.id]=0; ent[m.id]=0; }
-    aut[m.id] += m.asig;
+  cons.forEach(c => Object.keys(c.casas).forEach(m => {
+    if(!(m in aut)){ ids.push(m); aut[m]=0; ped[m]=0; ent[m]=0; }
+    aut[m] += autorizadas(c.num,m,'ent') + autorizadas(c.num,m,'az');
   }));
-  PEDIDOS.forEach(p => p.lineas.forEach(l => { ped[l.id]+=l.casas; ent[l.id]+=l.entregadas; }));
+  peds.forEach(p => p.lineas.forEach(l => { if(l.m in ped){ ped[l.m]+=l.losas; ent[l.m]+=l.ent; } }));
 
   const data = {
-    labels: ids.map(i => CATALOGO[i].nombre),
+    labels: ids.map(i => MODELOS[i].nombre),
     datasets: [
-      {label:'Entregado',         data: ids.map(i=>ent[i]),               backgroundColor: COL.ent, borderRadius:4, datalabels:{color:'#fff'}},
-      {label:'Pedido en proceso', data: ids.map(i=>ped[i]-ent[i]),        backgroundColor: COL.pro, borderRadius:4, datalabels:{color:'#fff'}},
-      {label:'Por pedir',         data: ids.map(i=>aut[i]-ped[i]),        backgroundColor: COL.dis, borderRadius:4, datalabels:{color:'#1f2d3a'}},
+      {label:'Entregado',         data: ids.map(i=>ent[i]),        backgroundColor: COL.ent, borderRadius:4, datalabels:{color:'#fff'}},
+      {label:'Pedido en proceso', data: ids.map(i=>ped[i]-ent[i]), backgroundColor: COL.pro, borderRadius:4, datalabels:{color:'#fff'}},
+      {label:'Por pedir',         data: ids.map(i=>aut[i]-ped[i]), backgroundColor: COL.dis, borderRadius:4, datalabels:{color:'#1f2d3a'}},
     ]
   };
   if(chartModelo) chartModelo.destroy();
@@ -482,104 +525,107 @@ function renderChartModelo(){
   });
 }
 
-/* =========================================================
-   NUEVO REQUERIMIENTO
-   ========================================================= */
+/* ===================== NUEVO REQUERIMIENTO ===================== */
 let contratoSel = CONTRATOS[0];
 
-function renderPedido(){
-  $('m_des').textContent = contratoSel.desarrollador;
-  $('m_fra').textContent = contratoSel.fracc;
-  $('m_pri').textContent = contratoSel.privada;
+// Llena el selector de contratos solo con los del proyecto elegido.
+function poblarContratos(){
+  const proy = $('selProyecto').value;
+  const selC = $('selContrato');
+  selC.innerHTML = '';
+  CONTRATOS.filter(c => c.proyecto === proy).forEach(c => selC.add(new Option(`Contrato ${c.num} · Lote ${c.lote}`, c.num)));
+  contratoSel = contratoPorNum(selC.value);
+}
 
-  $('rows').innerHTML = contratoSel.modelos.map(m => {
-    const cat = CATALOGO[m.id];
-    const disp = disponible(contratoSel.num, m.id);
-    return `<tr>
-      <td class="l"><span class="model">${cat.nombre}</span></td>
-      <td class="num">${mxn.format(cat.precio)}</td>
-      <td><span class="pill ${disp===0?'zero':''}" id="disp_${m.id}">${disp}</span></td>
-      <td><input class="qty" id="qty_${m.id}" data-modelo="${m.id}" type="number" min="0" max="${disp}" step="1" value="0" inputmode="numeric"></td>
-      <td class="sub-amt zero" id="sub_${m.id}">$0.00</td>
-    </tr>`;
+function renderPedido(){
+  $('m_fra').textContent = contratoSel.fracc;
+
+  $('rows').innerHTML = Object.keys(contratoSel.casas).map(m => {
+    const M = MODELOS[m];
+    return ['ent','az'].map((t,i) => {
+      const disp = disponible(contratoSel.num, m, t);
+      const modelCell = i===0 ? `<td class="l modelcell" rowspan="2"><span class="model">${M.nombre}<small>${contratoSel.casas[m]} casas · ${M.ent}E + ${M.az}A</small></span></td>` : '';
+      return `<tr>
+        ${modelCell}
+        <td class="l elem">${TIPO[t]}</td>
+        <td class="num">${mxn.format(precioLosa(m,t))}</td>
+        <td><span class="pill ${disp===0?'zero':''}" id="disp_${m}_${t}">${disp}</span></td>
+        <td><input class="qty" id="qty_${m}_${t}" data-m="${m}" data-t="${t}" type="number" min="0" max="${disp}" step="1" value="0" inputmode="numeric"></td>
+        <td class="sub-amt zero" id="sub_${m}_${t}">$0.00</td>
+      </tr>`;
+    }).join('');
   }).join('');
 
   recompute();
 }
 
 function recompute(){
-  let sub=0, pedidas=0, disponibles=0, autorizadas=0;
-  contratoSel.modelos.forEach(m => {
-    const disp = disponible(contratoSel.num, m.id);
-    disponibles += disp; autorizadas += m.asig;
-    const input = $('qty_'+m.id);
-    let q = parseInt(input.value, 10);
-    if(isNaN(q) || q < 0) q = 0;
+  let sub=0, pedidas=0, disponibles=0, autorizadasT=0;
+  Object.keys(contratoSel.casas).forEach(m => ['ent','az'].forEach(t => {
+    const disp = disponible(contratoSel.num, m, t);
+    disponibles += disp; autorizadasT += autorizadas(contratoSel.num, m, t);
+    const input = $('qty_'+m+'_'+t);
+    let q = parseInt(input.value, 10); if(isNaN(q)||q<0) q=0;
     if(q > disp){ q = disp; input.value = disp; }
-    const linea = q * CATALOGO[m.id].precio;
+    const linea = q * precioLosa(m,t);
     sub += linea; pedidas += q;
-    const subEl = $('sub_'+m.id);
-    subEl.textContent = mxn.format(linea);
-    subEl.classList.toggle('zero', q === 0);
-    const pillEl = $('disp_'+m.id);
-    pillEl.textContent = disp - q;
-    pillEl.classList.toggle('zero', disp - q === 0);
-  });
+    const subEl = $('sub_'+m+'_'+t);
+    subEl.textContent = mxn.format(linea); subEl.classList.toggle('zero', q===0);
+    const pillEl = $('disp_'+m+'_'+t);
+    pillEl.textContent = disp - q; pillEl.classList.toggle('zero', disp - q === 0);
+  }));
   $('t_sub').textContent = mxn.format(sub);
   $('t_iva').textContent = mxn.format(sub*IVA);
   $('t_tot').textContent = mxn.format(sub*(1+IVA));
   $('s_disp').textContent = disponibles - pedidas;
   $('s_ped').textContent  = pedidas;
   $('m_saldo').textContent = disponibles - pedidas;
-  $('m_saldo_de').textContent = 'de ' + autorizadas;
+  $('m_saldo_de').textContent = 'de ' + autorizadasT;
   $('btnSend').disabled = (pedidas === 0);
 }
 
-function setTelefono(){
-  const r = RESPONSABLES.find(x => x.nombre === $('f_resp').value);
-  $('f_tel').textContent = r ? r.tel : '—';
-}
+function setTelefono(){ const r = RESPONSABLES.find(x => x.nombre === $('f_resp').value); $('f_tel').textContent = r ? r.tel : '—'; }
 function ocultarBanner(){ $('banner').classList.remove('show'); }
 
 function enviarRequerimiento(){
-  const lineas = contratoSel.modelos
-    .map(m => ({id:m.id, casas: parseInt($('qty_'+m.id).value, 10) || 0, entregadas:0}))
-    .filter(l => l.casas > 0);
+  const lineas = [];
+  Object.keys(contratoSel.casas).forEach(m => ['ent','az'].forEach(t => {
+    const q = parseInt($('qty_'+m+'_'+t).value, 10) || 0;
+    if(q > 0) lineas.push({m, t, losas:q, ent:0});
+  }));
   if(!lineas.length) return;
 
-  PEDIDOS.push({
-    folio:'—', contrato: contratoSel.num, fecha: hoyISO,
-    entrega: $('f_entrega').value, estado:'Solicitado', lineas
-  });
+  PEDIDOS.push({folio:'—', contrato: contratoSel.num, fecha: hoyISO, entrega: $('f_entrega').value, estado:'Solicitado', lineas});
 
-  const txt = lineas.map(l => l.casas + ' ' + CATALOGO[l.id].nombre).join(' · ');
-  $('bannerSub').textContent = `Contrato ${contratoSel.num} · ${txt}. Folio de OC y fecha quedan a confirmar por PREPA.`;
+  const txt = lineas.map(l => `${l.losas} ${TIPO[l.t].toLowerCase()} ${MODELOS[l.m].nombre}`).join(' · ');
+  $('bannerSub').textContent = `Contrato ${contratoSel.num} · Lote ${contratoSel.lote} · ${txt}. Folio de OC y fecha quedan a confirmar por PREPA.`;
   $('banner').classList.add('show');
   renderPedido();
   window.scrollTo({top:0, behavior:'smooth'});
 }
 
-/* =========================================================
-   SEGUIMIENTO Y FINANZAS
-   ========================================================= */
+/* ===================== SEGUIMIENTO Y FINANZAS ===================== */
 let filtroContrato = 'todos';
 let filtroEstado   = 'todos';
 
+function losaTxt(l){ return `${l.losas} ${TIPO[l.t].toLowerCase()} ${MODELOS[l.m].nombre}`; }
+
 function renderHist(){
   const filas = PEDIDOS.filter(p =>
+    (filtroFracc === 'todos'    || contratoPorNum(p.contrato).fracc === filtroFracc) &&
     (filtroContrato === 'todos' || p.contrato === filtroContrato) &&
     (filtroEstado === 'todos'   || p.estado === filtroEstado)
   );
   $('histBody').innerHTML = filas.length ? filas.map(p => {
-    const casas = p.lineas.map(l => `${l.casas} ${CATALOGO[l.id].nombre}`).join(', ');
+    const c = contratoPorNum(p.contrato);
     const folio = p.folio === '—' ? '<span style="color:var(--faint)">por asignar</span>' : `<span class="folio">${p.folio}</span>`;
     const entrega = p.entrega === '—' ? '<span style="color:var(--faint)">por confirmar</span>' : fechaCorta(p.entrega);
-    return `<tr>
+    return `<tr onclick="openModal('${p.id}')">
       <td class="l">${folio}</td>
       <td class="l">${fechaCorta(p.fecha)}</td>
-      <td class="l">Contrato ${p.contrato}</td>
-      <td class="l">${casas}</td>
-      <td class="num">${mxn.format(totalConIva(p))}</td>
+      <td class="l">C${p.contrato} · L${c.lote}</td>
+      <td class="l">${p.lineas.map(losaTxt).join(', ')}</td>
+      <td class="num">${mxn.format(totalPedido(p))}</td>
       <td class="l">${entrega}</td>
       <td class="l"><span class="chip ${CHIP[p.estado]}">${p.estado}</span></td>
     </tr>`;
@@ -587,24 +633,32 @@ function renderHist(){
 }
 
 function renderSeguimiento(){
-  // Conteo por estado
+  renderFiltro('ffilterSeg');
+  const consFracc = contratosFiltrados();
+  const numsFracc = consFracc.map(c => c.num);
+  const pedsFracc = PEDIDOS.filter(p => numsFracc.includes(p.contrato));
+
   $('statline').innerHTML = ESTADOS.map(e =>
-    `<span class="scount"><span class="chip ${CHIP[e]}" style="padding:2px 8px">${e}</span><b>${PEDIDOS.filter(p=>p.estado===e).length}</b></span>`).join('');
+    `<span class="scount"><span class="chip ${CHIP[e]}" style="padding:2px 8px">${e}</span><b>${pedsFracc.filter(p=>p.estado===e).length}</b></span>`).join('');
+
+  // Pills de contrato: solo las del fraccionamiento elegido
+  $('filters').querySelectorAll('.dyn').forEach(n => n.remove());
+  const sel = $('fEstado');
+  consFracc.forEach(c => {
+    const b = document.createElement('button');
+    b.className = 'pill-f dyn'; b.dataset.c = c.num; b.textContent = 'C' + c.num;
+    b.addEventListener('click', () => { filtroContrato = c.num; marcarFiltroContrato(c.num); renderHist(); });
+    $('filters').insertBefore(b, sel);
+  });
+  marcarFiltroContrato(filtroContrato);
   renderHist();
 
-  // Finanzas (preliminar)
-  const montoFactura = f => f.ocs.reduce((s,oc) => {
-    const p = PEDIDOS.find(x => x.folio === oc);
-    return s + (p ? totalConIva(p) : 0);
-  }, 0);
+  const montoFactura = f => f.ocs.reduce((s,oc) => { const p = PEDIDOS.find(x => x.folio === oc); return s + (p ? totalPedido(p) : 0); }, 0);
   let facturado=0, pagado=0;
   FACTURAS.forEach(f => { const m = montoFactura(f); facturado += m; if(f.estado === 'Pagada') pagado += m; });
   $('finKpis').innerHTML = [
-    {k:'Facturado',  v:mxn0.format(facturado)},
-    {k:'Pagado',     v:mxn0.format(pagado)},
-    {k:'Por cobrar', v:mxn0.format(facturado - pagado)},
+    {k:'Facturado', v:mxn0.format(facturado)}, {k:'Pagado', v:mxn0.format(pagado)}, {k:'Por cobrar', v:mxn0.format(facturado-pagado)},
   ].map(x => `<div class="kpi"><div class="k">${x.k}</div><div class="v sm">${x.v}</div></div>`).join('');
-
   $('facBody').innerHTML = FACTURAS.length ? FACTURAS.map(f => `<tr>
     <td class="l"><span class="folio">${f.folio}</span></td>
     <td class="l"><span class="ocs">${f.ocs.join(', ')}</span></td>
@@ -614,61 +668,103 @@ function renderSeguimiento(){
   </tr>`).join('') : `<tr><td colspan="5" class="empty">Sin facturas</td></tr>`;
 }
 
-// Llamada desde las tarjetas del tablero: salta a seguimiento ya filtrado por contrato.
-function verPedidos(num){
-  filtroContrato = num;
-  navTo('seguimiento');
-  document.querySelectorAll('#filters .pill-f').forEach(b => b.classList.toggle('active', b.dataset.c === num));
-  renderHist();
+/* ===== Modal de detalle de orden ===== */
+function openModal(id){
+  const p = PEDIDOS.find(x => x.id === id); if(!p) return;
+  const c = contratoPorNum(p.contrato);
+  const folio = p.folio === '—' ? 'Por asignar' : p.folio;
+  const filas = p.lineas.map(l => {
+    const pend = l.losas - l.ent;
+    return `<tr><td class="l">${MODELOS[l.m].nombre}</td><td class="l">${TIPO[l.t]}</td><td>${l.losas}</td><td>${l.ent}</td><td>${pend}</td><td class="num">${mxn.format(precioLosa(l.m,l.t))}</td><td class="num">${mxn.format(l.losas*precioLosa(l.m,l.t))}</td></tr>`;
+  }).join('');
+  const sub = subtotalPedido(p);
+  const pend = losasPedido(p) - p.lineas.reduce((s,l)=>s+l.ent,0);
+  const nota = p.estado === 'Parcial' ? `<div class="modal-note">Entrega parcial: faltan ${pend} losa(s). Se completan con un complemento sobre esta misma OC, sin tocar el saldo.</div>` : '';
+  const entrega = p.entrega === '—' ? 'por confirmar' : fechaLarga(new Date(p.entrega+'T00:00:00'));
+  $('modalCard').innerHTML = `
+    <div class="modal-h">
+      <div><div class="hl">Orden de compra</div><h3>${folio}</h3><div class="msub">Contrato ${p.contrato} · Lote ${c.lote} · ${c.proyecto} · ${c.fracc}</div></div>
+      <div class="right"><span class="chip ${CHIP[p.estado]}">${p.estado}</span><button class="modal-close" onclick="closeModal()" aria-label="Cerrar">✕</button></div>
+    </div>
+    <div class="modal-body">
+      <div class="mdates">
+        <div class="meta"><span>Fecha de pedido</span><b>${fechaLarga(new Date(p.fecha+'T00:00:00'))}</b></div>
+        <div class="meta"><span>Entrega solicitada</span><b>${entrega}</b></div>
+      </div>
+      <table>
+        <thead><tr><th class="l">Modelo</th><th class="l">Elemento</th><th>Pedidas</th><th>Entregadas</th><th>Pendiente</th><th>P.U. losa</th><th>Subtotal</th></tr></thead>
+        <tbody>${filas}</tbody>
+      </table>
+      ${nota}
+      <div class="modal-tot">
+        <div class="tline"><span>Subtotal</span><span class="num">${mxn.format(sub)}</span></div>
+        <div class="tline"><span>IVA (16%)</span><span class="num">${mxn.format(sub*IVA)}</span></div>
+        <div class="tline grand"><span>Total</span><span class="num">${mxn.format(sub*(1+IVA))}</span></div>
+      </div>
+    </div>`;
+  $('modalOv').classList.add('show');
 }
+function closeModal(){ $('modalOv').classList.remove('show'); }
 
-/* =========================================================
-   INIT  (eventos enganchados una sola vez)
-   ========================================================= */
+function marcarFiltroContrato(num){
+  document.querySelectorAll('#filters .pill-f').forEach(b => b.classList.toggle('active', b.dataset.c === num));
+}
+function verPedidos(num){ filtroContrato = num; navTo('seguimiento'); marcarFiltroContrato(num); renderHist(); }
+
+/* ===================== INIT ===================== */
 function init(){
   Chart.register(ChartDataLabels);
-  Chart.defaults.font.family = 'Manrope';
-  Chart.defaults.font.size = 12;
-  Chart.defaults.color = '#5d6e7d';
+  Chart.defaults.font.family = 'Manrope'; Chart.defaults.font.size = 12; Chart.defaults.color = '#5d6e7d';
 
-  // Navegación
   document.querySelectorAll('.nav button').forEach(b => b.addEventListener('click', () => navTo(b.dataset.sec)));
 
-  // Selects del pedido
-  const selC = $('selContrato');
-  CONTRATOS.forEach(c => selC.add(new Option('Contrato ' + c.num, c.num)));
-  selC.addEventListener('change', () => { contratoSel = contratoPorNum(selC.value); ocultarBanner(); renderPedido(); });
+  // Filtro por fraccionamiento — Tablero
+  $('ffilter').addEventListener('click', e => {
+    const b = e.target.closest('.fbtn'); if(!b) return;
+    filtroFracc = b.dataset.f; renderTablero();
+  });
+  // Filtro por fraccionamiento — Seguimiento (reinicia el de contrato)
+  $('ffilterSeg').addEventListener('click', e => {
+    const b = e.target.closest('.fbtn'); if(!b) return;
+    filtroFracc = b.dataset.f; filtroContrato = 'todos'; renderSeguimiento();
+  });
+
+  // Proyecto → contrato (proyecto es la primera elección)
+  const selP = $('selProyecto');
+  proyectos().forEach(p => selP.add(new Option(p, p)));
+  poblarContratos();
+  selP.addEventListener('change', () => { poblarContratos(); ocultarBanner(); renderPedido(); });
+  $('selContrato').addEventListener('change', e => { contratoSel = contratoPorNum(e.target.value); ocultarBanner(); renderPedido(); });
 
   RESPONSABLES.forEach(r => $('f_resp').add(new Option(r.nombre, r.nombre)));
   $('f_resp').addEventListener('change', setTelefono);
   RECIBE.forEach(n => $('f_recibe').add(new Option(n, n)));
 
-  // Captura de cantidades por delegación (no se re-enganchan listeners al re-renderizar)
   $('rows').addEventListener('input', e => { if(e.target.classList.contains('qty')){ recompute(); ocultarBanner(); } });
-
   $('btnReset').addEventListener('click', () => {
-    contratoSel.modelos.forEach(m => { const i = $('qty_'+m.id); if(i) i.value = 0; });
+    Object.keys(contratoSel.casas).forEach(m => ['ent','az'].forEach(t => { const i=$('qty_'+m+'_'+t); if(i) i.value=0; }));
     recompute(); ocultarBanner();
   });
   $('btnSend').addEventListener('click', enviarRequerimiento);
 
-  // Fechas del pedido
   $('f_pedido').textContent = fechaLarga(new Date());
-  const ent = new Date(); ent.setDate(ent.getDate() + 8);
+  // Regla de entrega: no dentro de las próximas 48 h (mínimo seleccionable = hoy + 3 días)
+  const min = new Date(); min.setDate(min.getDate()+3); const minISO = min.toISOString().slice(0,10);
+  const ent = new Date(); ent.setDate(ent.getDate()+8);
+  $('f_entrega').min = minISO;
   $('f_entrega').value = ent.toISOString().slice(0,10);
+  $('f_entrega').addEventListener('change', e => { if(e.target.value && e.target.value < minISO) e.target.value = minISO; });
 
-  // Filtros de seguimiento
-  document.querySelectorAll('#filters .pill-f').forEach(b => b.addEventListener('click', () => {
-    filtroContrato = b.dataset.c;
-    document.querySelectorAll('#filters .pill-f').forEach(x => x.classList.toggle('active', x === b));
-    renderHist();
-  }));
+  $('filters').querySelector('[data-c="todos"]').addEventListener('click', function(){ filtroContrato='todos'; marcarFiltroContrato('todos'); renderHist(); });
   $('fEstado').addEventListener('change', e => { filtroEstado = e.target.value; renderHist(); });
+
+  // Cierre del modal: clic fuera o tecla Esc
+  $('modalOv').addEventListener('click', e => { if(e.target === $('modalOv')) closeModal(); });
+  document.addEventListener('keydown', e => { if(e.key === 'Escape') closeModal(); });
 
   setTelefono();
   navTo('tablero');
 }
-
 window.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
